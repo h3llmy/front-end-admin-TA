@@ -1,38 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Link from 'next/link';
-import Sidebar from '../components/sidebar';
-import Navbar from '../components/navbar';
+import { useState, useEffect } from 'react';
+import { fetchApi } from '../../utils/fetch.js';
+import DashboardLayout from '../components/layout/dashboardLayout.jsx';
+import Link from 'next/link.js';
 
 export default function Dashboard() {
   const [productsList, setProductsList] = useState();
 
   useEffect(() => {
-    async function getProducts() {
+    const fetching = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/product/list');
-        setProductsList(response.data.data);
+        const [products] = await Promise.all([
+          fetchApi.get('/product/list')
+        ])
+        setProductsList(products.data.data);
       } catch (error) {
         console.error(error);
       }
     }
-    getProducts();
+    fetching();
   }, []);
 
   return (
-    <React.Fragment>
-      <Navbar />
-      <Sidebar />
-      <div className="p-4 ml-64">
-        <div className="p-4 mt-14">
-          <Link href='/next'>
-            <a className='btn-blue'>Go to next page</a>
-          </Link>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam dignissimos aliquid error, animi illum, dolore molestiae sapiente nihil sint iusto deserunt ipsum laborum earum repellat nostrum, aspernatur sit ex voluptatibus?</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam dignissimos aliquid error, animi illum, dolore molestiae sapiente nihil sint iusto deserunt ipsum laborum earum repellat nostrum, aspernatur sit ex voluptatibus?</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam dignissimos aliquid error, animi illum, dolore molestiae sapiente nihil sint iusto deserunt ipsum laborum earum repellat nostrum, aspernatur sit ex voluptatibus?</p>
-        </div>
-      </div>
-    </React.Fragment>
+    <DashboardLayout>
+      <Link href='/next'>
+        <a className='btn-blue'>Go to home next</a>
+      </Link>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam dignissimos aliquid error, animi illum, dolore molestiae sapiente nihil sint iusto deserunt ipsum laborum earum repellat nostrum, aspernatur sit ex voluptatibus?</p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam dignissimos aliquid error, animi illum, dolore molestiae sapiente nihil sint iusto deserunt ipsum laborum earum repellat nostrum, aspernatur sit ex voluptatibus?</p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam dignissimos aliquid error, animi illum, dolore molestiae sapiente nihil sint iusto deserunt ipsum laborum earum repellat nostrum, aspernatur sit ex voluptatibus?</p>
+    </DashboardLayout>
   );
 }
