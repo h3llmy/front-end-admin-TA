@@ -1,6 +1,6 @@
 import LoginForm from "../components/form/loginForm";
 
-export default function Login() {
+const Login = () => {
     return (
         <div className="flex items-center justify-center h-screen flex-col">
             <h1 className="text-3xl dark:text-white text-black">
@@ -17,3 +17,13 @@ export default function Login() {
         </div>
     )
 }
+
+Login.getLayout = (page) => {
+    return (
+        <>
+            {page}
+        </>
+    )
+}
+
+export default Login

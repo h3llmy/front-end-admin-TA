@@ -4,7 +4,7 @@ import DashboardLayout from '../components/layout/dashboardLayout';
 
 export default function Next() {
   return (
-    <DashboardLayout>
+    <>
       <Link href='/dashboard'>
         <a className='btn-blue'>Go to home page</a>
       </Link>
@@ -13,6 +13,6 @@ export default function Next() {
         <a className='btn-blue'>Go to home page</a>
       </Link>
       <h1>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo adipisci dolorum ea. Enim asperiores ipsa inventore voluptatem, impedit minus soluta error necessitatibus nobis magnam, nihil saepe ut aspernatur dolorem eaque.</h1>
-    </DashboardLayout>
+    </>
   )
 }

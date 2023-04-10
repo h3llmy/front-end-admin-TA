@@ -69,6 +69,7 @@ export default (windowName, options) => {
   const browserOptions = {
     ...state,
     ...options,
+    icon: './resources/__yuuka_blue_archive_drawn_by_amonitto__sample-8a8247ab1c40e8ee7ad019f04f9c4d8d.jpg',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
