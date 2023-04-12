@@ -1,18 +1,21 @@
 import { useState, useEffect } from 'react';
 import { fetchApi } from '../../utils/fetch.js';
-import DashboardLayout from '../components/layout/dashboardLayout.jsx';
-import Link from 'next/link.js';
+import LineChart from '../components/chart/lineChart.jsx';
+import BarChart from '../components/chart/barChart.jsx';
 
 export default function Dashboard() {
-  const [productsList, setProductsList] = useState();
+  const [incomePerMonth, setIncomePerMonth] = useState();
+  const [incomePerYear, setIncomePerYear] = useState();
 
   useEffect(() => {
     const fetching = async () => {
       try {
-        const [products] = await Promise.all([
-          fetchApi.get('/product/list')
+        const [perMonth, perYear] = await Promise.all([
+          fetchApi.get('/order/list/permonth'),
+          fetchApi.get('/order/list/peryear')
         ])
-        setProductsList(products.data.data);
+        setIncomePerMonth(perMonth.data.data);
+        setIncomePerYear(perYear.data.data);
       } catch (error) {
         console.error(error);
       }
@@ -22,65 +25,23 @@ export default function Dashboard() {
 
   return (
     <>
-      <Link href='/next'>
-        <a className='btn-blue'>Go to home next</a>
-      </Link>
-      <Line options={options} data={data} />
+      <div className="grid grid-cols-2 gap-4">
+        <div className='w-full h-64 dark:bg-gray-800 rounded-lg p-3 shadow-md'>
+          <BarChart
+            title={`Data Penjualan Bulanan ${new Date().getFullYear()}`}
+            labels={incomePerMonth?.map(product => product.month)}
+            data={incomePerMonth?.map(product => product.totalIncome)}>
+          </BarChart>
+        </div>
+        <div className='w-full h-64 dark:bg-gray-800 rounded-lg p-3 shadow-md'>
+          <BarChart
+            title={`Data Penjualan ${new Date().getFullYear() - 10} - ${new Date().getFullYear()}`}
+            labels={incomePerYear?.map(product => product.year)}
+            data={incomePerYear?.map(product => product.totalIncome)}>
+          </BarChart>
+        </div>
+      </div>
+
     </>
   );
 }
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top',
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Line Chart',
-    },
-  },
-};
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map(() => Math.floor(Math.random() * 1001)),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data: labels.map(() => Math.floor(Math.random() * 1001)),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};

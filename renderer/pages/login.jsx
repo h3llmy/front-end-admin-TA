@@ -9,8 +9,8 @@ const Login = () => {
             <h1 className="text-2xl dark:text-white text-black mb-10">
                 Admin Semua Aplikasi Indonesia
             </h1>
-            <div className="dark:bg-gray-600 border-2 border-black rounded-md w-2/4">
-                <div className="m-3">
+            <div className="dark:bg-gray-600 border-2 border-black rounded-lg w-2/4">
+                <div className="m-10">
                     <LoginForm />
                 </div>
             </div>
