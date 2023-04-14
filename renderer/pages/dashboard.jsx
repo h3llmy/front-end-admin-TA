@@ -34,11 +34,11 @@ export default function Dashboard() {
           </BarChart>
         </div>
         <div className='w-full h-64 dark:bg-gray-800 rounded-lg p-3 shadow-md'>
-          <BarChart
+          <LineChart
             title={`Data Penjualan ${new Date().getFullYear() - 10} - ${new Date().getFullYear()}`}
             labels={incomePerYear?.map(product => product.year)}
             data={incomePerYear?.map(product => product.totalIncome)}>
-          </BarChart>
+          </LineChart>
         </div>
       </div>
 
