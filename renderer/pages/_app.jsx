@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
-import Head from 'next/head';
+import React, { useEffect } from "react";
+import Head from "next/head";
 
-import '../styles/globals.css';
-import DashboardLayout from '../components/layout/dashboardLayout';
+import "../styles/globals.css";
+import DashboardLayout from "../components/layout/dashboardLayout";
 
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme")
+    const storedTheme = localStorage.getItem("theme");
     if (storedTheme === "dark") {
-      document.documentElement.classList.add("dark")
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove("dark")
+      document.documentElement.classList.remove("dark");
     }
-  }, [])
+  }, []);
 
   const HeadComponent = (
     <Head>
@@ -22,10 +22,10 @@ export default function MyApp({ Component, pageProps }) {
 
   const ComponentWithPageProps = <Component {...pageProps} />;
 
-  const LayoutComponent = Component.getLayout ? Component.getLayout(ComponentWithPageProps) : (
-    <DashboardLayout>
-      {ComponentWithPageProps}
-    </DashboardLayout>
+  const LayoutComponent = Component.getLayout ? (
+    Component.getLayout(ComponentWithPageProps)
+  ) : (
+    <DashboardLayout>{ComponentWithPageProps}</DashboardLayout>
   );
 
   return (
