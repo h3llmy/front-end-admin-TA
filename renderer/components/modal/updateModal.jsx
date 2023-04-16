@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useRef } from "react";
 
 export default function UpdateModal({ onAccept, onDecline, title, content }) {
+  const modalRef = useRef(null);
+
+  const handleBackdropClick = (event) => {
+    if (modalRef.current === event.target) {
+      onDecline();
+    }
+  };
+
   return (
     <div
+      ref={modalRef}
       id="staticModal"
       data-modal-backdrop="static"
       tabIndex="-1"
       aria-hidden="true"
       className="w-screen h-screen fixed top-0 left-0 right-0 z-50 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+      onClick={handleBackdropClick}
     >
       <div className="bg-white w-full md:max-w-2xl z-100 mx-4 md:mx-auto rounded-lg shadow-lg overflow-hidden">
         <div className="flex justify-between items-center px-6 py-4 bg-gray-200 border-b border-gray-300">
@@ -38,10 +48,10 @@ export default function UpdateModal({ onAccept, onDecline, title, content }) {
         <div className="px-6 py-4 bg-gray-200 border-t border-gray-300 flex justify-end items-center">
           <button
             type="button"
-            className="mr-2 px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 focus:outline-none focus:shadow-outline-indigo"
+            className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray"
             onClick={onAccept}
           >
-            Accept
+            Update
           </button>
           <button
             type="button"

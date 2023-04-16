@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Table from "../components/table/table";
 import { fetchApi } from "../../utils/fetch";
-import UpdateModal from "../components/modal/updateModal";
 import SearchForm from "../components/form/searchForm";
 import Pagination from "../components/table/pagination";
 
@@ -32,38 +31,58 @@ export default function Product() {
     fetching();
   }, [currentPage, searchText]);
 
+  const totalPages = productsList?.totalPages;
+
+  const handlePreviousClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setSearchText(event.target.elements.search.value);
+    setCurrentPage(1);
+  };
+
+  const handleOnchange = (event) => {
+    event.preventDefault();
+    if (event.target.value == "") {
+      setSearchText(event);
+    }
+  };
+
   return (
     <>
       <SearchForm
-        searchTextCallback={(search) => {
-          setCurrentPage(1);
-          setSearchText(search);
-        }}
+        handleSubmitCallback={handleSubmit}
+        handleOnchangeCallback={handleOnchange}
       />
 
       <Table
         headers={["name", "category", "type"]}
         data={productsList?.list}
-        actions={{
-          detail: (id, modalContent) => {
-            modalContent(<div>{id}</div>);
-          },
-          update: (id) => {
-            modalContent(<div>{id}</div>);
-          },
-          delete: (id) => {
-            modalContent(<div>{id}</div>);
-          },
-        }}
+        actions={["detail", "update", "delete"]}
       />
 
       <div className="flex flex-row-reverse pt-6">
         {productsList?.list && (
           <Pagination
-            data={productsList}
-            onPageChange={(page) => {
-              setCurrentPage(page);
-            }}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePreviousClick={handlePreviousClick}
+            handleNextClick={handleNextClick}
+            handlePageClick={handlePageClick}
           />
         )}
       </div>

@@ -32,7 +32,7 @@ export default function Navbar() {
               <img
                 src="/images/blip_footer.png"
                 className="h-8 mr-3"
-                alt="FlowBite Logo"
+                alt="Logo"
               />
               <span className="self-center font-semibold text-2xl whitespace-nowrap dark:text-white text-gray-900">
                 Admin Semua Aplikasi Indonesia

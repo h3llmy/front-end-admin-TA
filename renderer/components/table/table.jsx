@@ -19,6 +19,7 @@ function Table({ headers, data, actions }) {
     setModalTitle(title);
     setShowModal(true);
   };
+
   const newHeaders = headers.map((header) => ({
     label: header
       .replace(/([A-Z])/g, " $1")
@@ -61,25 +62,40 @@ function Table({ headers, data, actions }) {
                   ))}
                   {actions && (
                     <td className="px-6 py-2 space-x-5">
-                      {actions.includes("detail") && (
+                      {actions.detail && (
                         <button
-                          onClick={() => handleButtonClick("edit", "detail")}
+                          onClick={() =>
+                            actions.detail(row._id, (modalContent) => {
+                              setShowModal(true);
+                              setModalContent(modalContent);
+                            })
+                          }
                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                         >
                           Detail
                         </button>
                       )}
-                      {actions.includes("update") && (
+                      {actions.update && (
                         <button
-                          onClick={() => handleButtonClick("edit", "update")}
+                          onClick={() =>
+                            actions.detail(row._id, (modalContent) => {
+                              setShowModal(true);
+                              setModalContent(modalContent);
+                            })
+                          }
                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                         >
                           Edit
                         </button>
                       )}
-                      {actions.includes("delete") && (
+                      {actions.delete && (
                         <button
-                          onClick={() => handleButtonClick("edit", "delete")}
+                          onClick={() =>
+                            actions.detail(row._id, (modalContent) => {
+                              setShowModal(true);
+                              setModalContent(modalContent);
+                            })
+                          }
                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                         >
                           Delete
@@ -102,6 +118,7 @@ function Table({ headers, data, actions }) {
           </tbody>
         </table>
       </div>
+      <button onClick={() => handleButtonClick("edit", "Edit")}>Edit</button>
       {showModal && (
         <UpdateModal
           onAccept={handleAccept}

@@ -74,7 +74,7 @@ export default (windowName, options) => {
       nodeIntegration: true,
       contextIsolation: false,
       ...options.webPreferences,
-      devTools: options.devTools,
+      devTools: options.devTools || false,
     },
   };
   win = new BrowserWindow(browserOptions);

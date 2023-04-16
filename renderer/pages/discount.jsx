@@ -53,6 +53,7 @@ export default function Discount() {
   const handleSubmit = (event) => {
     event.preventDefault();
     setSearchText(event.target.elements.search.value);
+    setCurrentPage(1);
   };
 
   const handleOnchange = (event) => {
