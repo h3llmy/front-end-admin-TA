@@ -7,7 +7,7 @@ export default function InputText({
   disable,
 }) {
   const inputProps = {
-    type: "text",
+    type: "number",
     defaultValue: defaultValue || null,
     onKeyUp: (event) => {
       inputValue(event.target.value);

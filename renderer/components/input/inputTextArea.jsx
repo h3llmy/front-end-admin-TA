@@ -1,4 +1,4 @@
-export default function InputText({
+export default function InputTextArea({
   name,
   defaultValue,
   inputValue,
@@ -7,8 +7,10 @@ export default function InputText({
   disable,
 }) {
   const inputProps = {
-    type: "text",
     defaultValue: defaultValue || null,
+    rows: "4",
+    className:
+      "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
     onKeyUp: (event) => {
       inputValue(event.target.value);
     },
@@ -20,16 +22,18 @@ export default function InputText({
   if (disable) {
     inputProps.readOnly = true;
   }
-
   return (
-    <div>
-      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+    <>
+      <label
+        htmlFor="message"
+        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >
         {name}
       </label>
-      <input {...inputProps} />
+      <textarea {...inputProps}></textarea>
       {onError && (
         <div className="text-[#FF0000] font-semibold mb-2">{onError}</div>
       )}
-    </div>
+    </>
   );
 }

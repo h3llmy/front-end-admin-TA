@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
-import UpdateModal from "../modal/updateModal";
+import Modal from "../modal/modal";
 
 function Table({ headers, data, actions }) {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [modalTitle, setModalTitle] = useState("");
-  const [onDetail, setOnDetail] = useState("");
 
-  const handleAccept = () => {
-    setShowModal(false);
-  };
-
-  const handleDecline = () => {
-    setShowModal(false);
-  };
+  const MAX_LENGTH = 15;
 
   const newHeaders = headers.map((header) => ({
     label: header
@@ -52,7 +45,9 @@ function Table({ headers, data, actions }) {
                       key={column.key}
                       className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {row[column.key] || ""}
+                      {row[column.key].length > MAX_LENGTH
+                        ? `${row[column.key].substring(0, MAX_LENGTH)}...`
+                        : row[column.key] || ""}
                     </td>
                   ))}
                   {actions && (
@@ -68,6 +63,9 @@ function Table({ headers, data, actions }) {
                               },
                               (event) => {
                                 setShowModal(event);
+                              },
+                              (title) => {
+                                setModalTitle(title);
                               }
                             )
                           }
@@ -79,10 +77,19 @@ function Table({ headers, data, actions }) {
                       {actions.update && (
                         <button
                           onClick={() =>
-                            actions.update(row._id, (modalContent) => {
-                              setShowModal(true);
-                              setModalContent(modalContent);
-                            })
+                            actions.update(
+                              row._id,
+                              (modalContent) => {
+                                setShowModal(true);
+                                setModalContent(modalContent);
+                              },
+                              (event) => {
+                                setShowModal(event);
+                              },
+                              (title) => {
+                                setModalTitle(title);
+                              }
+                            )
                           }
                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                         >
@@ -92,10 +99,19 @@ function Table({ headers, data, actions }) {
                       {actions.delete && (
                         <button
                           onClick={() =>
-                            actions.delete(row._id, (modalContent) => {
-                              setShowModal(true);
-                              setModalContent(modalContent);
-                            })
+                            actions.delete(
+                              row._id,
+                              (modalContent) => {
+                                setShowModal(true);
+                                setModalContent(modalContent);
+                              },
+                              (event) => {
+                                setShowModal(event);
+                              },
+                              (title) => {
+                                setModalTitle(title);
+                              }
+                            )
                           }
                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                         >
@@ -120,9 +136,13 @@ function Table({ headers, data, actions }) {
         </table>
       </div>
       {showModal && (
-        <UpdateModal
-          onAccept={handleAccept}
-          onDecline={handleDecline}
+        <Modal
+          onAccept={() => {
+            setShowModal(false);
+          }}
+          onDecline={() => {
+            setShowModal(false);
+          }}
           content={modalContent}
           title={modalTitle}
         />
