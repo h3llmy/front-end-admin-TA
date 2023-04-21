@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { fetchApi } from "../../../utils/fetch";
 
-export default function LoginForm() {
+export default function LoginForm({ loginToken }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -9,7 +9,7 @@ export default function LoginForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const [loginToken] = await Promise.all([
+      loginToken = await Promise.all([
         fetchApi.post("/auth/login", {
           username,
           password,

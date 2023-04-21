@@ -3,7 +3,7 @@ import Table from "../components/table/table";
 import { fetchApi } from "../../utils/fetch";
 import SearchForm from "../components/form/searchForm";
 import UpdateModal from "../components/modal/updateModal";
-import Pagination from "../components/table/pagination";
+import Pagination from "../components/pagination/pagination";
 
 export default function Discount() {
   const [discountsList, setDiscountsList] = useState({});

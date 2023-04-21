@@ -20,6 +20,12 @@ export default function Pagination({ data, onPageChange }) {
     setCurrentPage(page);
   };
 
+  useEffect(() => {
+    if (totalPages < currentPage) {
+      setCurrentPage(totalPages);
+    }
+  }, [totalPages]);
+
   const displayPages = 5;
   let pageStart = currentPage - Math.floor(displayPages / 2);
   pageStart = Math.max(pageStart, 1);

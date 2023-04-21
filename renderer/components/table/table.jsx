@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UpdateModal from "../modal/updateModal";
 
 function Table({ headers, data, actions }) {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [modalTitle, setModalTitle] = useState("");
+  const [onDetail, setOnDetail] = useState("");
 
   const handleAccept = () => {
     setShowModal(false);
@@ -12,12 +13,6 @@ function Table({ headers, data, actions }) {
 
   const handleDecline = () => {
     setShowModal(false);
-  };
-
-  const handleButtonClick = (content, title) => {
-    setModalContent(content);
-    setModalTitle(title);
-    setShowModal(true);
   };
 
   const newHeaders = headers.map((header) => ({
@@ -65,10 +60,16 @@ function Table({ headers, data, actions }) {
                       {actions.detail && (
                         <button
                           onClick={() =>
-                            actions.detail(row._id, (modalContent) => {
-                              setShowModal(true);
-                              setModalContent(modalContent);
-                            })
+                            actions.detail(
+                              row._id,
+                              (modalContent) => {
+                                setShowModal(true);
+                                setModalContent(modalContent);
+                              },
+                              (event) => {
+                                setShowModal(event);
+                              }
+                            )
                           }
                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                         >
@@ -78,7 +79,7 @@ function Table({ headers, data, actions }) {
                       {actions.update && (
                         <button
                           onClick={() =>
-                            actions.detail(row._id, (modalContent) => {
+                            actions.update(row._id, (modalContent) => {
                               setShowModal(true);
                               setModalContent(modalContent);
                             })
@@ -91,7 +92,7 @@ function Table({ headers, data, actions }) {
                       {actions.delete && (
                         <button
                           onClick={() =>
-                            actions.detail(row._id, (modalContent) => {
+                            actions.delete(row._id, (modalContent) => {
                               setShowModal(true);
                               setModalContent(modalContent);
                             })
@@ -118,7 +119,6 @@ function Table({ headers, data, actions }) {
           </tbody>
         </table>
       </div>
-      <button onClick={() => handleButtonClick("edit", "Edit")}>Edit</button>
       {showModal && (
         <UpdateModal
           onAccept={handleAccept}

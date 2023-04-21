@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Table from "../components/table/table";
 import { fetchApi } from "../../utils/fetch";
-import UpdateModal from "../components/modal/updateModal";
 import SearchForm from "../components/form/searchForm";
-import Pagination from "../components/table/pagination";
+import Pagination from "../components/pagination/pagination";
+import TestForm from "../components/form/testForm";
 
 export default function Product() {
   const [productsList, setProductsList] = useState({});
@@ -30,7 +30,7 @@ export default function Product() {
       }
     };
     fetching();
-  }, [currentPage, searchText]);
+  }, [currentPage, searchText, productsList]);
 
   return (
     <>
@@ -45,14 +45,21 @@ export default function Product() {
         headers={["name", "category", "type"]}
         data={productsList?.list}
         actions={{
-          detail: (id, modalContent) => {
-            modalContent(<div>{id}</div>);
+          detail: (id, modalContent, setModal) => {
+            modalContent(
+              <TestForm
+                id={id}
+                setModal={(event) => {
+                  setModal(event);
+                }}
+              />
+            );
           },
-          update: (id) => {
-            modalContent(<div>{id}</div>);
+          update: (id, modalContent) => {
+            modalContent(<TestForm id={id} />);
           },
-          delete: (id) => {
-            modalContent(<div>{id}</div>);
+          delete: (id, modalContent) => {
+            modalContent(<TestForm id={id} />);
           },
         }}
       />

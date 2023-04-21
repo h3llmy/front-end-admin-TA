@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 
-export default function UpdateModal({ onAccept, onDecline, title, content }) {
+export default function UpdateModal({ onDecline, title, content }) {
   const modalRef = useRef(null);
 
   const handleBackdropClick = (event) => {
@@ -19,47 +19,36 @@ export default function UpdateModal({ onAccept, onDecline, title, content }) {
       className="w-screen h-screen fixed top-0 left-0 right-0 z-50 bg-gray-900 bg-opacity-50 flex justify-center items-center"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white w-full md:max-w-2xl z-100 mx-4 md:mx-auto rounded-lg shadow-lg overflow-hidden">
-        <div className="flex justify-between items-center px-6 py-4 bg-gray-200 border-b border-gray-300">
-          <h3 className="text-lg font-medium text-gray-900">{title}</h3>
-          <button
-            type="button"
-            className="text-gray-500 hover:text-gray-900 focus:outline-none"
-            onClick={onDecline}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+      <div className="relative w-full max-w-2xl max-h-full">
+        <div className="relative bg-white rounded-lg shadow">
+          <div className="flex items-start justify-between p-4 border-b rounded-t bg-gray-200 dark:bg-gray-700 dark:border-gray-600">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              {title}
+            </h3>
+            <button
+              type="button"
+              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              onClick={onDecline}
             >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-        <div className="px-6 py-4">
-          <div className="text-gray-700">{content}</div>
-        </div>
-        <div className="px-6 py-4 bg-gray-200 border-t border-gray-300 flex justify-end items-center">
-          <button
-            type="button"
-            className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray"
-            onClick={onAccept}
-          >
-            Update
-          </button>
-          <button
-            type="button"
-            className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray"
-            onClick={onDecline}
-          >
-            Decline
-          </button>
+              <svg
+                aria-hidden="true"
+                className="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+              <span className="sr-only">Close modal</span>
+            </button>
+          </div>
+          <div className="p-6 max-h-96 overflow-y-auto dark:bg-gray-800">
+            {content}
+          </div>
         </div>
       </div>
     </div>
