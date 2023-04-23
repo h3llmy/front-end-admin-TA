@@ -9,6 +9,7 @@ export default function Product() {
   const [productsList, setProductsList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const fetchProducts = async () => {
     try {
@@ -21,11 +22,8 @@ export default function Product() {
       ]);
       setProductsList(products.data.data);
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setProductsList({});
-      } else {
-        console.error(error);
-      }
+      setErrorMessage(error?.response?.data?.message);
+      console.error(error);
     }
   };
 
@@ -43,8 +41,9 @@ export default function Product() {
       />
 
       <Table
-        headers={["name", "category", "type"]}
+        headers={["name", "category", "type", "price"]}
         data={productsList?.list}
+        errorMessage={errorMessage}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Product");

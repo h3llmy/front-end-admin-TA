@@ -4,36 +4,37 @@ import { fetchApi } from "../../utils/fetch";
 import SearchForm from "../components/form/searchForm";
 import Pagination from "../components/pagination/pagination";
 import ProductForm from "../components/form/productForm";
+import { getLoginCookie } from "../../utils/cookie";
 
-export default function Product() {
-  const [productsList, setProductsList] = useState({});
+export default function Order() {
+  const [ordersList, setOrdersList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const fetchProducts = async () => {
+  const fetchOrders = async () => {
     try {
       const [products] = await Promise.all([
-        fetchApi.get(
-          `/order/list?page=${currentPage}&limit=10${
-            searchText && `&search=${searchText}`
-          }`
-        ),
+        fetchApi.get(`/order/list`, {
+          headers: {
+            Authorization: `Bearer ${await getLoginCookie("user")}`,
+          },
+        }),
       ]);
-      setProductsList(products.data.data);
+      products.data.data.list.forEach((product) => {
+        product.customer = product.customer.username;
+      });
+      setOrdersList(products.data.data);
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setProductsList({});
-      } else {
-        console.error(error);
-      }
+      setErrorMessage(error?.response?.data?.message);
+      console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchOrders();
   }, [currentPage, searchText]);
 
-  console.log(productsList);
   return (
     <>
       <SearchForm
@@ -43,14 +44,15 @@ export default function Product() {
         }}
       />
 
-      {/* <Table
-        headers={["name", "category", "type"]}
-        data={productsList?.list}
+      <Table
+        headers={["customer", "productName", "productType", "orderStatus"]}
+        data={ordersList?.list}
+        errorMessage={errorMessage}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Product");
             modalContent(
-              <TestForm
+              <ProductForm
                 id={id}
                 disable={true}
                 setModal={(event) => {
@@ -62,39 +64,24 @@ export default function Product() {
           update: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Product");
             modalContent(
-              <TestForm
+              <ProductForm
                 id={id}
                 label={"Update"}
                 color={"bg-blue-600 hover:bg-blue-700"}
                 setModal={(event) => {
-                  fetchProducts();
-                  setModal(event);
-                }}
-              />
-            );
-          },
-          delete: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Delete Product");
-            modalContent(
-              <TestForm
-                id={id}
-                disable={true}
-                label={"Delete"}
-                color={"bg-[#DC2626] hover:bg-[#B91C1C]"}
-                setModal={(event) => {
-                  fetchProducts();
+                  fetchOrders();
                   setModal(event);
                 }}
               />
             );
           },
         }}
-      /> */}
+      />
 
       <div className="flex flex-row-reverse pt-6">
-        {productsList?.list && (
+        {ordersList?.list && (
           <Pagination
-            data={productsList}
+            data={ordersList}
             onPageChange={(page) => {
               setCurrentPage(page);
             }}

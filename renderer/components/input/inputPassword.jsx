@@ -1,4 +1,4 @@
-export default function InputNumber({
+export default function InputPassword({
   name,
   defaultValue,
   inputValue,
@@ -7,7 +7,7 @@ export default function InputNumber({
   disable,
 }) {
   const inputProps = {
-    type: "number",
+    type: "password",
     defaultValue: defaultValue || null,
     onKeyUp: (event) => {
       inputValue(event.target.value);

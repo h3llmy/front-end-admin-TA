@@ -21,7 +21,7 @@ export default function Modal({ onDecline, title, content }) {
     >
       <div className="relative w-full max-w-4xl max-h-full">
         <div className="relative bg-white rounded-lg shadow">
-          <div className="flex items-start justify-between p-4 border-b rounded-t bg-gray-200 dark:bg-gray-700 dark:border-gray-600">
+          <div className="flex items-start justify-between p-4 border-b rounded-t bg-gray-200 dark:bg-gray-800 dark:border-gray-600">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
               {title}
             </h3>

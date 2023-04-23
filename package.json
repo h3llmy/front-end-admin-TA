@@ -12,8 +12,7 @@
   },
   "dependencies": {
     "electron-serve": "^1.1.0",
-    "electron-store": "^8.1.0",
-    "react-modal": "^3.16.1"
+    "electron-store": "^8.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.7",
@@ -21,6 +20,7 @@
     "chart.js": "^4.2.1",
     "electron": "^21.3.3",
     "electron-builder": "^23.6.0",
+    "iron-session": "^6.3.1",
     "next": "^12.3.4",
     "nextron": "^8.5.0",
     "postcss": "^8.4.13",

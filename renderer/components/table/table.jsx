@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Modal from "../modal/modal";
 
-function Table({ headers, data, actions }) {
+function Table({ headers, data, actions, errorMessage }) {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [modalTitle, setModalTitle] = useState("");
 
   const MAX_LENGTH = 15;
+
+  const handleActionClick = (action, id) => {
+    action(
+      id,
+      (modalContent) => {
+        setShowModal(true);
+        setModalContent(modalContent);
+      },
+      (event) => {
+        setShowModal(event);
+      },
+      (title) => {
+        setModalTitle(title);
+      }
+    );
+  };
 
   const newHeaders = headers.map((header) => ({
     label: header
@@ -22,12 +38,12 @@ function Table({ headers, data, actions }) {
           <thead className="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               {newHeaders.map((column) => (
-                <th key={column.key} scope="col" className="px-6 py-3">
+                <th key={column.key} scope="col" className="px-6 py-2">
                   {column.label}
                 </th>
               ))}
               {actions && (
-                <th key="actions" scope="col" className="px-6 py-3">
+                <th key="actions" scope="col" className="px-6 py-2">
                   Action
                 </th>
               )}
@@ -51,23 +67,11 @@ function Table({ headers, data, actions }) {
                     </td>
                   ))}
                   {actions && (
-                    <td className="px-6 py-2 space-x-5">
+                    <td className="px-6 py-1 space-x-2">
                       {actions.detail && (
                         <button
                           onClick={() =>
-                            actions.detail(
-                              row._id,
-                              (modalContent) => {
-                                setShowModal(true);
-                                setModalContent(modalContent);
-                              },
-                              (event) => {
-                                setShowModal(event);
-                              },
-                              (title) => {
-                                setModalTitle(title);
-                              }
-                            )
+                            handleActionClick(actions.detail, row._id)
                           }
                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                         >
@@ -77,19 +81,7 @@ function Table({ headers, data, actions }) {
                       {actions.update && (
                         <button
                           onClick={() =>
-                            actions.update(
-                              row._id,
-                              (modalContent) => {
-                                setShowModal(true);
-                                setModalContent(modalContent);
-                              },
-                              (event) => {
-                                setShowModal(event);
-                              },
-                              (title) => {
-                                setModalTitle(title);
-                              }
-                            )
+                            handleActionClick(actions.update, row._id)
                           }
                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                         >
@@ -99,19 +91,7 @@ function Table({ headers, data, actions }) {
                       {actions.delete && (
                         <button
                           onClick={() =>
-                            actions.delete(
-                              row._id,
-                              (modalContent) => {
-                                setShowModal(true);
-                                setModalContent(modalContent);
-                              },
-                              (event) => {
-                                setShowModal(event);
-                              },
-                              (title) => {
-                                setModalTitle(title);
-                              }
-                            )
+                            handleActionClick(actions.delete, row._id)
                           }
                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                         >
@@ -128,7 +108,13 @@ function Table({ headers, data, actions }) {
                   className="px-6 py-4 font-medium text-center bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-[#DC2626] whitespace-nowrap dark:text-[#DC2626]"
                   colSpan={newHeaders.length + (actions ? 1 : 0)}
                 >
-                  Data not found
+                  {errorMessage ? (
+                    errorMessage
+                  ) : (
+                    <div className="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 animate-pulse dark:text-blue-200">
+                      loading...
+                    </div>
+                  )}
                 </td>
               </tr>
             )}
