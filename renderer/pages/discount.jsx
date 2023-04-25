@@ -4,33 +4,38 @@ import { fetchApi } from "../../utils/fetch";
 import SearchForm from "../components/form/searchForm";
 import Pagination from "../components/pagination/pagination";
 import ProductForm from "../components/form/productForm";
+import { dateConvert } from "../../utils/dateConvert";
 
-export default function Product() {
-  const [productsList, setProductsList] = useState({});
+export default function Discount() {
+  const [discountsList, setDiscountsList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const fetchProducts = async () => {
+  const fetchDiscounts = async () => {
     try {
-      const [products] = await Promise.all([
+      const [discount] = await Promise.all([
         fetchApi.get(
-          `/product/list?page=${currentPage}&limit=10${
+          `/discount/list?page=${currentPage}&limit=10${
             searchText && `&search=${searchText}`
           }`
         ),
       ]);
-      setProductsList(products.data.data);
+      discount.data.data.list.forEach((discount) => {
+        discount.product = discount.product.name;
+        discount.percentage = `${discount.percentage}%`;
+        discount.startAt = dateConvert(discount.startAt);
+        discount.expiredAt = dateConvert(discount.expiredAt);
+      });
+      setDiscountsList(discount.data.data);
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setProductsList({});
-      } else {
-        console.error(error);
-      }
+      setErrorMessage(error?.response?.data?.message || error.message);
+      console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchDiscounts();
   }, [currentPage, searchText]);
 
   return (
@@ -43,8 +48,9 @@ export default function Product() {
       />
 
       <Table
-        headers={["name", "category", "type"]}
-        data={productsList?.list}
+        headers={["name", "product", "percentage", "startAt", "expiredAt"]}
+        data={discountsList?.list}
+        errorMessage={errorMessage}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Product");
@@ -66,7 +72,7 @@ export default function Product() {
                 label={"Update"}
                 color={"bg-blue-600 hover:bg-blue-700"}
                 setModal={(event) => {
-                  fetchProducts();
+                  fetchDiscounts();
                   setModal(event);
                 }}
               />
@@ -81,7 +87,7 @@ export default function Product() {
                 label={"Delete"}
                 color={"bg-[#DC2626] hover:bg-[#B91C1C]"}
                 setModal={(event) => {
-                  fetchProducts();
+                  fetchDiscounts();
                   setModal(event);
                 }}
               />
@@ -91,9 +97,9 @@ export default function Product() {
       />
 
       <div className="flex flex-row-reverse pt-6">
-        {productsList?.list && (
+        {discountsList?.list && (
           <Pagination
-            data={productsList}
+            data={discountsList}
             onPageChange={(page) => {
               setCurrentPage(page);
             }}

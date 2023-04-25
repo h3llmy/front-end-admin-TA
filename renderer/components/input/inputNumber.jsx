@@ -8,7 +8,7 @@ export default function InputNumber({
 }) {
   const inputProps = {
     type: "number",
-    defaultValue: defaultValue || null,
+    defaultValue: defaultValue,
     onKeyUp: (event) => {
       inputValue(event.target.value);
     },

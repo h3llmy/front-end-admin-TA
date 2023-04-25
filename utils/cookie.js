@@ -1,11 +1,17 @@
+import jwtDecode from "jwt-decode";
 import { fetchApi } from "./fetch";
 
 export const setCookie = (name, token) => {
+    const decodeToken = jwtDecode(token)
+    if (decodeToken.status === 'admin') {
         const expires = new Date();
         expires.setTime(expires.getTime() + 30 * 24 * 60 * 60 * 1000);
         const cookie = `${name}=${token};expires=${expires.toUTCString()};path=/`;
         document.cookie = cookie;
+    } else {
+        throw new Error('Unauthorized')
     }
+}
 export const getLoginCookie = async (name) => {
     try {
         const myCookie = document.cookie.split('; ').find(cookie => cookie.startsWith(`${name}=`));

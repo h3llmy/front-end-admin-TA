@@ -3,8 +3,8 @@ import Table from "../components/table/table";
 import { fetchApi } from "../../utils/fetch";
 import SearchForm from "../components/form/searchForm";
 import Pagination from "../components/pagination/pagination";
-import ProductForm from "../components/form/productForm";
 import { getLoginCookie } from "../../utils/cookie";
+import OrderForm from "../components/form/orderForm";
 
 export default function Order() {
   const [ordersList, setOrdersList] = useState({});
@@ -26,7 +26,7 @@ export default function Order() {
       });
       setOrdersList(products.data.data);
     } catch (error) {
-      setErrorMessage(error?.response?.data?.message);
+      setErrorMessage(error?.response?.data?.message || error.message);
       console.error(error);
     }
   };
@@ -52,7 +52,7 @@ export default function Order() {
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Product");
             modalContent(
-              <ProductForm
+              <OrderForm
                 id={id}
                 disable={true}
                 setModal={(event) => {
@@ -64,7 +64,7 @@ export default function Order() {
           update: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Product");
             modalContent(
-              <ProductForm
+              <OrderForm
                 id={id}
                 label={"Update"}
                 color={"bg-blue-600 hover:bg-blue-700"}

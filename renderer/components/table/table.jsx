@@ -61,7 +61,7 @@ function Table({ headers, data, actions, errorMessage }) {
                       key={column.key}
                       className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {row[column.key].length > MAX_LENGTH
+                      {row[column.key]?.length > MAX_LENGTH
                         ? `${row[column.key].substring(0, MAX_LENGTH)}...`
                         : row[column.key] || ""}
                     </td>

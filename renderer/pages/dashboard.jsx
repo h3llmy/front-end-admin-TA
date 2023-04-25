@@ -2,10 +2,8 @@ import { useState, useEffect } from "react";
 import { fetchApi } from "../../utils/fetch.js";
 import LineChart from "../components/chart/lineChart.jsx";
 import BarChart from "../components/chart/barChart.jsx";
-import { useRouter } from "next/router.js";
 
 export default function Dashboard() {
-  const router = useRouter();
   const [incomePerMonth, setIncomePerMonth] = useState();
   const [incomePerYear, setIncomePerYear] = useState();
 

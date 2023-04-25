@@ -38,7 +38,7 @@ export default function LoginForm() {
       } else if (error.response?.data?.message === "error validations") {
         setErrorMessage(error.response.data.path);
       } else {
-        setErrorMessage("something worng please retry");
+        setErrorMessage(error.message || "something worng please retry");
       }
       console.error(error);
     }
@@ -62,7 +62,6 @@ export default function LoginForm() {
           inputValue={(value) => {
             setPassword(value);
           }}
-          autoFocus
           onError={
             errorMessage.password ||
             (typeof errorMessage == "string" && errorMessage)

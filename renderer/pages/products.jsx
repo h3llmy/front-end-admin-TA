@@ -22,7 +22,7 @@ export default function Product() {
       ]);
       setProductsList(products.data.data);
     } catch (error) {
-      setErrorMessage(error?.response?.data?.message);
+      setErrorMessage(error?.response?.data?.message || error.message);
       console.error(error);
     }
   };

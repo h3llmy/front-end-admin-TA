@@ -9,18 +9,19 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
   const [product, setProduct] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
 
+  const getProductDetail = async () => {
+    try {
+      const [dataProduct] = await Promise.all([
+        fetchApi.get(`/product/detail/${id}`),
+      ]);
+      const { data } = dataProduct.data;
+      setProduct(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const getProductDetail = async () => {
-      try {
-        const [dataProduct] = await Promise.all([
-          fetchApi.get(`/product/detail/${id}`),
-        ]);
-        const { data } = dataProduct.data;
-        setProduct(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     getProductDetail();
   }, [id]);
 
