@@ -50,7 +50,7 @@ export default function Order() {
         errorMessage={errorMessage}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Detail Product");
+            setModalTitle("Detail Order");
             modalContent(
               <OrderForm
                 id={id}
@@ -62,7 +62,7 @@ export default function Order() {
             );
           },
           update: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Update Product");
+            setModalTitle("Update Order");
             modalContent(
               <OrderForm
                 id={id}

@@ -4,6 +4,7 @@ import ModalButton from "../button/modalButton";
 import InputText from "../input/inputText";
 import InputNumber from "../input/inputNumber";
 import InputTextArea from "../input/inputTextArea";
+import { getLoginCookie } from "../../../utils/cookie";
 
 export default function ProductForm({ id, setModal, disable, label, color }) {
   const [product, setProduct] = useState({});
@@ -30,10 +31,18 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
     try {
       switch (label.toLowerCase()) {
         case "update":
-          await fetchApi.put(`/product/update/${id}`, product);
+          await fetchApi.put(`/product/update/${id}`, product, {
+            headers: {
+              Authorization: `Bearer ${await getLoginCookie("user")}`,
+            },
+          });
           break;
         case "delete":
-          await fetchApi.delete(`/product/delete/${id}`);
+          await fetchApi.delete(`/product/delete/${id}`, {
+            headers: {
+              Authorization: `Bearer ${await getLoginCookie("user")}`,
+            },
+          });
           break;
       }
       setModal(false);

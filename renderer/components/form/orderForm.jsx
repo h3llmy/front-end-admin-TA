@@ -55,7 +55,7 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
               order.customer.username = value;
             }}
             disable={true}
-            onError={errorMessage.name}
+            onError={errorMessage.customer?.username}
           />
           <InputText
             name={"Product Name"}

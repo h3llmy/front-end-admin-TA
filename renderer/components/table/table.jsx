@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "../modal/modal";
 
 function Table({ headers, data, actions, errorMessage }) {

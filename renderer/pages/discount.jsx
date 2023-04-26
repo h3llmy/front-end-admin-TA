@@ -3,8 +3,8 @@ import Table from "../components/table/table";
 import { fetchApi } from "../../utils/fetch";
 import SearchForm from "../components/form/searchForm";
 import Pagination from "../components/pagination/pagination";
-import ProductForm from "../components/form/productForm";
 import { dateConvert } from "../../utils/dateConvert";
+import DiscountForm from "../components/form/discountForm";
 
 export default function Discount() {
   const [discountsList, setDiscountsList] = useState({});
@@ -53,9 +53,9 @@ export default function Discount() {
         errorMessage={errorMessage}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Detail Product");
+            setModalTitle("Detail Discount");
             modalContent(
-              <ProductForm
+              <DiscountForm
                 id={id}
                 disable={true}
                 setModal={(event) => {
@@ -65,9 +65,9 @@ export default function Discount() {
             );
           },
           update: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Update Product");
+            setModalTitle("Update Discount");
             modalContent(
-              <ProductForm
+              <DiscountForm
                 id={id}
                 label={"Update"}
                 color={"bg-blue-600 hover:bg-blue-700"}
@@ -79,9 +79,9 @@ export default function Discount() {
             );
           },
           delete: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Delete Product");
+            setModalTitle("Delete Discount");
             modalContent(
-              <ProductForm
+              <DiscountForm
                 id={id}
                 disable={true}
                 label={"Delete"}
