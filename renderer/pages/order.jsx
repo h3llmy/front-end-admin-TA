@@ -33,7 +33,7 @@ export default function Order() {
 
   useEffect(() => {
     fetchOrders();
-  }, [currentPage, searchText]);
+  }, [currentPage, searchText, errorMessage]);
 
   return (
     <>
@@ -61,7 +61,7 @@ export default function Order() {
               />
             );
           },
-          update: (id, modalContent, setModal, setModalTitle) => {
+          edit: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Order");
             modalContent(
               <OrderForm

@@ -12,6 +12,9 @@ export default function InputPassword({
     onKeyUp: (event) => {
       inputValue(event.target.value);
     },
+    onChange: (event) => {
+      inputValue(event.target.value);
+    },
     autoFocus: autoFocus,
     placeholder: name,
     className:

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchApi } from "../../utils/fetch.js";
 import LineChart from "../components/chart/lineChart.jsx";
 import BarChart from "../components/chart/barChart.jsx";
+import { getLoginCookie } from "../../utils/cookie.js";
 
 export default function Dashboard() {
   const [incomePerMonth, setIncomePerMonth] = useState();
@@ -10,8 +11,16 @@ export default function Dashboard() {
   const fetching = async () => {
     try {
       const [perMonth, perYear] = await Promise.all([
-        fetchApi.get("/order/list/permonth"),
-        fetchApi.get("/order/list/peryear"),
+        fetchApi.get("/order/list/permonth", {
+          headers: {
+            Authorization: `Bearer ${await getLoginCookie("user")}`,
+          },
+        }),
+        fetchApi.get("/order/list/peryear", {
+          headers: {
+            Authorization: `Bearer ${await getLoginCookie("user")}`,
+          },
+        }),
       ]);
       setIncomePerMonth(perMonth.data.data);
       setIncomePerYear(perYear.data.data);

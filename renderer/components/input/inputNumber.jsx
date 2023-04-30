@@ -10,6 +10,17 @@ export default function InputNumber({
     type: "number",
     defaultValue: defaultValue,
     onKeyUp: (event) => {
+      if (event.target.value < 0) {
+        event.target.value = 0;
+        inputValue(Number(0));
+      }
+      inputValue(event.target.value);
+    },
+    onChange: (event) => {
+      if (event.target.value < 0) {
+        event.target.value = 0;
+        inputValue(Number(0));
+      }
       inputValue(event.target.value);
     },
     autoFocus: autoFocus,

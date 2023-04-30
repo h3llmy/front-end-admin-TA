@@ -64,22 +64,10 @@ export default function DiscountForm({ id, setModal, disable, label, color }) {
       }
       setModal(false);
     } catch (error) {
-      if (error?.response?.data?.message === "error validations") {
-        setErrorMessage(error.response.data.path);
-      }
+      setErrorMessage(error?.response?.data?.path);
       console.error(error);
     }
   };
-
-  const [selectedValue, setSelectedValue] = useState("");
-  const [inputValue, setInputValue] = useState("Option 2");
-  console.log(selectedValue);
-  const options = [
-    { _id: "1", name: "Option 1" },
-    { _id: "2", name: "Option 2" },
-    { _id: "3", name: "Option 3" },
-    { _id: "4", name: "Option 4" },
-  ];
 
   return (
     <>
@@ -93,28 +81,20 @@ export default function DiscountForm({ id, setModal, disable, label, color }) {
               discount.name = value;
             }}
             disable={disable}
-            onError={errorMessage.name}
+            onError={errorMessage?.name}
           />
-          {/* fix this with drop down */}
           <InputDropdown
             name="Product Name"
             options={product}
             displayKey={"name"}
             valueKey={"_id"}
             disable={disable}
-            defaultValue={"Lucious16"}
-            selectedValue={setSelectedValue}
-            onError={errorMessage.product}
-          />
-          {/* <InputText
-            name={"Product Name"}
             defaultValue={discount?.product?.name}
-            inputValue={(value) => {
-              discount.product.name = value;
+            selectedValue={(value) => {
+              discount.product = value;
             }}
-            disable={disable}
-            onError={errorMessage.product}
-          /> */}
+            onError={errorMessage?.product}
+          />
           <InputNumber
             name={"Percentage"}
             defaultValue={discount?.percentage}
@@ -122,27 +102,34 @@ export default function DiscountForm({ id, setModal, disable, label, color }) {
               discount.percentage = value;
             }}
             disable={disable}
-            onError={errorMessage.percentage}
+            onError={errorMessage?.percentage}
           />
           <InputDate
             name={"Start At"}
             defaultValue={discount?.startAt}
             inputValue={(value) => {
-              console.log(value);
               discount.startAt = value;
             }}
             disable={disable}
-            onError={errorMessage.startAt}
+            onError={errorMessage?.startAt}
           />
           <InputDate
             name={"Expired At"}
             defaultValue={discount?.expiredAt}
             inputValue={(value) => {
-              console.log(value);
               discount.expiredAt = value;
             }}
             disable={disable}
-            onError={errorMessage.expiredAt}
+            onError={errorMessage?.expiredAt}
+          />
+          <InputDate
+            name={"created At"}
+            defaultValue={discount?.createdAt}
+            inputValue={(value) => {
+              // discount.createdAt = value;
+            }}
+            disable={true}
+            onError={errorMessage?.createdAt}
           />
         </div>
 

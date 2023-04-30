@@ -4,6 +4,7 @@ import ModalButton from "../button/modalButton";
 import InputText from "../input/inputText";
 import InputNumber from "../input/inputNumber";
 import InputTextArea from "../input/inputTextArea";
+import InputDate from "../input/inputDate";
 import { getLoginCookie } from "../../../utils/cookie";
 
 export default function OrderForm({ id, setModal, disable, label, color }) {
@@ -33,7 +34,11 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await fetchApi.put(`/order/update/${id}`, order);
+      await fetchApi.put(`/order/update/${id}`, order, {
+        headers: {
+          Authorization: `Bearer ${await getLoginCookie("user")}`,
+        },
+      });
       setModal(false);
     } catch (error) {
       if (error?.response?.data?.message === "error validations") {
@@ -48,7 +53,7 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-5">
           <InputText
-            name={"Username"}
+            name={"Customer"}
             defaultValue={order?.customer?.username}
             autoFocus
             inputValue={(value) => {
@@ -99,7 +104,7 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
             inputValue={(value) => {
               order.orderStatus = value;
             }}
-            disable={true}
+            disable={disable}
             onError={errorMessage.orderStatus}
           />
           <InputNumber
@@ -120,6 +125,15 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
             disable={true}
             onError={errorMessage.maxRevision}
           />
+          <InputDate
+            name={"created At"}
+            defaultValue={order?.createdAt}
+            inputValue={(value) => {
+              // order.createdAt = value;
+            }}
+            disable={true}
+            onError={errorMessage?.createdAt}
+          />
         </div>
         <div className="mt-5">
           <InputTextArea
@@ -129,10 +143,10 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
               order.note
             }
             inputValue={(value) => {
-              order.note = value;
+              order.revisionNote = value;
             }}
-            disable={disable}
-            onError={errorMessage.note}
+            disable={true}
+            onError={errorMessage.revisionNote}
           />
         </div>
 

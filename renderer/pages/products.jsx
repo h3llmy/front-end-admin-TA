@@ -29,7 +29,7 @@ export default function Product() {
 
   useEffect(() => {
     fetchProducts();
-  }, [currentPage, searchText]);
+  }, [currentPage, searchText, errorMessage]);
 
   return (
     <>
@@ -48,16 +48,10 @@ export default function Product() {
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Product");
             modalContent(
-              <ProductForm
-                id={id}
-                disable={true}
-                setModal={(event) => {
-                  setModal(event);
-                }}
-              />
+              <ProductForm id={id} disable={true} setModal={setModal} />
             );
           },
-          update: (id, modalContent, setModal, setModalTitle) => {
+          edit: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Product");
             modalContent(
               <ProductForm
@@ -91,12 +85,7 @@ export default function Product() {
 
       <div className="flex flex-row-reverse pt-6">
         {productsList?.list && (
-          <Pagination
-            data={productsList}
-            onPageChange={(page) => {
-              setCurrentPage(page);
-            }}
-          />
+          <Pagination data={productsList} onPageChange={setCurrentPage} />
         )}
       </div>
     </>

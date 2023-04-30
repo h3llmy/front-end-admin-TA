@@ -36,7 +36,7 @@ export default function Discount() {
 
   useEffect(() => {
     fetchDiscounts();
-  }, [currentPage, searchText]);
+  }, [currentPage, searchText, errorMessage]);
 
   return (
     <>
@@ -64,7 +64,7 @@ export default function Discount() {
               />
             );
           },
-          update: (id, modalContent, setModal, setModalTitle) => {
+          edit: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Discount");
             modalContent(
               <DiscountForm

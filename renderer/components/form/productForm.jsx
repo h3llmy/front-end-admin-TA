@@ -5,6 +5,7 @@ import InputText from "../input/inputText";
 import InputNumber from "../input/inputNumber";
 import InputTextArea from "../input/inputTextArea";
 import { getLoginCookie } from "../../../utils/cookie";
+import Test from "../../pages/test";
 
 export default function ProductForm({ id, setModal, disable, label, color }) {
   const [product, setProduct] = useState({});
@@ -113,6 +114,9 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
             disable={disable}
             onError={errorMessage.dayWorok}
           />
+        </div>
+        <div className="mt-5">
+          <Test disable={disable} />
         </div>
         <div className="mt-5">
           <InputTextArea

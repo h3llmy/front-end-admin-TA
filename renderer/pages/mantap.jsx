@@ -1,8 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function Mantap() {
+export default function Test() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    setSelectedFiles([
+      {
+        type: "image/jpeg",
+        url: "http://localhost:3000/image/1682770186550-1682386288399.jpeg",
+      },
+    ]);
+  }, []);
 
   const handleFileSelect = (event) => {
     const files = Array.from(event.target.files);
@@ -32,17 +41,16 @@ export default function Mantap() {
         {selectedFiles &&
           selectedFiles.map((file, index) => (
             <div
-              key={file.name}
+              key={index}
               className={`carousel-item ${
                 index === currentSlide ? "active" : "hidden"
               }`}
             >
               {file.type.includes("image/") ? (
-                <img src={URL.createObjectURL(file)} alt={file.name} />
+                <img src={file.url || URL.createObjectURL(file)} />
               ) : (
                 <p>File type: {file.type}</p>
               )}
-              <p>{file.name}</p>
               <button onClick={() => handleFileRemove(index)}>Remove</button>
             </div>
           ))}

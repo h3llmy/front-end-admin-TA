@@ -8,6 +8,7 @@ export default function InputDropdown({
   displayKey,
   valueKey,
   disable,
+  onError,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -31,7 +32,7 @@ export default function InputDropdown({
       selectedValue(filtereDefaultValue[0][valueKey]);
       setSearchValue(filtereDefaultValue[0][displayKey]);
     }
-  }, [options]);
+  }, [options, defaultValue]);
 
   const handleOptionClick = (option) => {
     selectedValue(option[valueKey]);
@@ -64,7 +65,7 @@ export default function InputDropdown({
 
   useEffect(() => {
     if (!isOpen && !isValidOption && options.length > 0) {
-      if (filtereDefaultValue.length !== 0) {
+      if (filtereDefaultValue.length !== 0 && searchValue !== "") {
         selectedValue(filtereDefaultValue[0][valueKey]);
         setSearchValue(filtereDefaultValue[0][displayKey]);
       } else {
@@ -119,6 +120,9 @@ export default function InputDropdown({
           </div>
         )}
       </div>
+      {onError && (
+        <div className="text-[#FF0000] font-semibold mb-2">{onError}</div>
+      )}
     </div>
   );
 }
