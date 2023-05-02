@@ -15,16 +15,22 @@ export default function Order() {
   const fetchOrders = async () => {
     try {
       const [products] = await Promise.all([
-        fetchApi.get(`/order/list`, {
-          headers: {
-            Authorization: `Bearer ${await getLoginCookie("user")}`,
-          },
-        }),
+        fetchApi.get(
+          `/order/list?page=${currentPage}&limit=10${
+            searchText && `&search=${searchText}`
+          }`,
+          {
+            headers: {
+              Authorization: `Bearer ${await getLoginCookie("user")}`,
+            },
+          }
+        ),
       ]);
       products.data.data.list.forEach((product) => {
         product.customer = product.customer.username;
       });
       setOrdersList(products.data.data);
+      setErrorMessage("");
     } catch (error) {
       setErrorMessage(error?.response?.data?.message || error.message);
       console.error(error);
@@ -61,7 +67,7 @@ export default function Order() {
               />
             );
           },
-          edit: (id, modalContent, setModal, setModalTitle) => {
+          update: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Order");
             modalContent(
               <OrderForm
@@ -80,12 +86,7 @@ export default function Order() {
 
       <div className="flex flex-row-reverse pt-6">
         {ordersList?.list && (
-          <Pagination
-            data={ordersList}
-            onPageChange={(page) => {
-              setCurrentPage(page);
-            }}
-          />
+          <Pagination data={ordersList} onPageChange={setCurrentPage} />
         )}
       </div>
     </>

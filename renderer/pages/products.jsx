@@ -21,6 +21,7 @@ export default function Product() {
         ),
       ]);
       setProductsList(products.data.data);
+      setErrorMessage("");
     } catch (error) {
       setErrorMessage(error?.response?.data?.message || error.message);
       console.error(error);

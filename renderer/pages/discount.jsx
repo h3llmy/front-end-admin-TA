@@ -28,6 +28,7 @@ export default function Discount() {
         discount.expiredAt = dateConvert(discount.expiredAt);
       });
       setDiscountsList(discount.data.data);
+      setErrorMessage("");
     } catch (error) {
       setErrorMessage(error?.response?.data?.message || error.message);
       console.error(error);
@@ -98,12 +99,7 @@ export default function Discount() {
 
       <div className="flex flex-row-reverse pt-6">
         {discountsList?.list && (
-          <Pagination
-            data={discountsList}
-            onPageChange={(page) => {
-              setCurrentPage(page);
-            }}
-          />
+          <Pagination data={discountsList} onPageChange={setCurrentPage} />
         )}
       </div>
     </>

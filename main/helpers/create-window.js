@@ -1,11 +1,8 @@
-import {
-  screen,
-  BrowserWindow
-} from 'electron';
-import Store from 'electron-store';
+import { screen, BrowserWindow } from "electron";
+import Store from "electron-store";
 
 export default (windowName, options) => {
-  const key = 'window-state';
+  const key = "window-state";
   const name = `window-state-${windowName}`;
   const store = new Store({ name });
   const defaultSize = {
@@ -45,8 +42,8 @@ export default (windowName, options) => {
     });
   };
 
-  const ensureVisibleOnSomeDisplay = windowState => {
-    const visible = screen.getAllDisplays().some(display => {
+  const ensureVisibleOnSomeDisplay = (windowState) => {
+    const visible = screen.getAllDisplays().some((display) => {
       return windowWithinBounds(windowState, display.bounds);
     });
     if (!visible) {
@@ -61,6 +58,8 @@ export default (windowName, options) => {
     if (!win.isMinimized() && !win.isMaximized()) {
       Object.assign(state, getCurrentPosition());
     }
+    const session = new Store({ name: "session" });
+    session.delete("user");
     store.set(key, state);
   };
 
@@ -69,7 +68,7 @@ export default (windowName, options) => {
   const browserOptions = {
     ...state,
     ...options,
-    icon: './resources/__yuuka_blue_archive_drawn_by_amonitto__sample-8a8247ab1c40e8ee7ad019f04f9c4d8d.jpg',
+    icon: "./resources/__yuuka_blue_archive_drawn_by_amonitto__sample-8a8247ab1c40e8ee7ad019f04f9c4d8d.jpg",
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -79,7 +78,7 @@ export default (windowName, options) => {
   };
   win = new BrowserWindow(browserOptions);
 
-  win.on('close', saveState);
+  win.on("close", saveState);
 
   return win;
 };

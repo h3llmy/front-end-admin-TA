@@ -3,7 +3,7 @@ import { useState } from "react";
 export default function SearchForm({ searchTextCallback }) {
   return (
     <form
-      className="flex items-center pb-6"
+      className="flex items-center"
       onSubmit={(event) => {
         event.preventDefault();
         searchTextCallback(event.target.elements.search.value);

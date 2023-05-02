@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 export default function InputNumber({
   name,
   defaultValue,
@@ -6,6 +8,11 @@ export default function InputNumber({
   autoFocus,
   disable,
 }) {
+  useEffect(() => {
+    if (defaultValue) {
+      inputValue(defaultValue);
+    }
+  }, [defaultValue]);
   const inputProps = {
     type: "number",
     defaultValue: defaultValue,

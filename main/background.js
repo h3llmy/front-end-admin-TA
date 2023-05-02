@@ -1,34 +1,31 @@
-import { app } from 'electron';
-import serve from 'electron-serve';
-import { createWindow } from './helpers';
+import { app } from "electron";
+import serve from "electron-serve";
+import { createWindow } from "./helpers";
 
-const isProd = process.env.NODE_ENV === 'production';
+const isProd = process.env.NODE_ENV === "production";
 
 if (isProd) {
-  serve({ directory: 'app' });
+  serve({ directory: "app" });
 } else {
-  app.setPath('userData', `${app.getPath('userData')} (development)`);
+  app.setPath("userData", `${app.getPath("userData")} (development)`);
 }
 
 (async () => {
   await app.whenReady();
 
-  const mainWindow = createWindow(
-    'main',
-   { devTools: !isProd }
-   );
+  const mainWindow = createWindow("main", { devTools: !isProd });
 
-  mainWindow.maximize()
+  mainWindow.maximize();
 
   if (isProd) {
-    await mainWindow.loadURL('app://./dashboard.html');
+    await mainWindow.loadURL("app://./login.html");
   } else {
     const port = process.argv[2];
-    await mainWindow.loadURL(`http://localhost:${port}/dashboard`);
+    await mainWindow.loadURL(`http://localhost:${port}/login`);
     mainWindow.webContents.openDevTools();
   }
 })();
 
-app.on('window-all-closed', () => {
+app.on("window-all-closed", () => {
   app.quit();
 });
