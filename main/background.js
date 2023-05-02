@@ -13,7 +13,7 @@ if (isProd) {
 (async () => {
   await app.whenReady();
 
-  const mainWindow = createWindow("main", { devTools: !isProd });
+  const mainWindow = createWindow("AdminSai", { devTools: !isProd });
 
   mainWindow.maximize();
 

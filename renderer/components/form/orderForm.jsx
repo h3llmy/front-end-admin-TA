@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { fetchApi } from "../../../utils/fetch";
-import ModalButton from "../button/modalButton";
+import ModalFormButton from "../button/modalFormButton";
 import InputText from "../input/inputText";
 import InputNumber from "../input/inputNumber";
 import InputTextArea from "../input/inputTextArea";
 import InputDate from "../input/inputDate";
 import { getLoginCookie } from "../../../utils/cookie";
+import errorHanddler from "../../../utils/errorHanddler";
 
 export default function OrderForm({ id, setModal, disable, label, color }) {
   const [order, setOrder] = useState({});
@@ -42,14 +43,7 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
       });
       setModal(false);
     } catch (error) {
-      if (error.response?.data?.message) {
-        setErrorMessage(error.response.data.message);
-      } else if (error?.response?.data?.message === "error validations") {
-        setErrorMessage(error.response.data.path);
-      } else {
-        setErrorMessage(error.message || "something worng please retry");
-      }
-      console.error(error);
+      errorHanddler(error, setErrorMessage);
     }
   };
 
@@ -159,7 +153,7 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
           />
         </div>
 
-        <ModalButton
+        <ModalFormButton
           onDecline={() => {
             setModal(false);
           }}

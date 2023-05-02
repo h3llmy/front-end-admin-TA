@@ -5,6 +5,7 @@ import SearchForm from "../components/form/searchForm";
 import Pagination from "../components/pagination/pagination";
 import { dateConvert } from "../../utils/dateConvert";
 import DiscountForm from "../components/form/discountForm";
+import errorHanddler from "../../utils/errorHanddler";
 
 export default function Discount() {
   const [discountsList, setDiscountsList] = useState({});
@@ -30,8 +31,7 @@ export default function Discount() {
       setDiscountsList(discount.data.data);
       setErrorMessage("");
     } catch (error) {
-      setErrorMessage(error?.response?.data?.message || error.message);
-      console.error(error);
+      errorHanddler(error, setErrorMessage);
     }
   };
 

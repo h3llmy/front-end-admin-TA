@@ -63,31 +63,29 @@ function Table({ headers, data, actions, errorMessage }) {
                         : row[column.key] || ""}
                     </td>
                   ))}
-                  <td className="px-6 py-1 space-x-2">
-                    {Object.keys(actions).map((action, index) => (
-                      <button
-                        key={index}
-                        onClick={() =>
-                          actions[action](
-                            row._id,
-                            (modalContent) => {
-                              setShowModal(true);
-                              setModalContent(modalContent);
-                            },
-                            (event) => {
-                              setShowModal(event);
-                            },
-                            (title) => {
-                              setModalTitle(title);
-                            }
-                          )
-                        }
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        {stringDisplay(action)}
-                      </button>
-                    ))}
-                  </td>
+                  {actions && (
+                    <td className="px-6 py-1 space-x-2">
+                      {Object.keys(actions).map((action, index) => (
+                        <button
+                          key={index}
+                          onClick={() =>
+                            actions[action](
+                              row._id,
+                              (modalContent) => {
+                                setShowModal(true);
+                                setModalContent(modalContent);
+                              },
+                              setShowModal,
+                              setModalTitle
+                            )
+                          }
+                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        >
+                          {stringDisplay(action)}
+                        </button>
+                      ))}
+                    </td>
+                  )}
                 </tr>
               ))
             ) : (

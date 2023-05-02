@@ -119,62 +119,72 @@ export default function InputMultipleFiles({
             className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           >
             {selectedFiles.length === 0 ? (
-              <>
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <svg
-                    aria-hidden="true"
-                    className="w-10 h-10 mb-3 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                    ></path>
-                  </svg>
-                  <div className="mb-2 text-sm text-center text-gray-500 dark:text-gray-400">
-                    <span className="font-semibold">Click to upload</span>
-                    <p>or drag and drop</p>
-                  </div>
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg
+                  aria-hidden="true"
+                  className="w-10 h-10 mb-3 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  ></path>
+                </svg>
+                <div className="mb-2 text-sm text-center text-gray-500 dark:text-gray-400">
+                  <span className="font-semibold">Click to upload</span>
+                  <p>or drag and drop</p>
                 </div>
-              </>
+              </div>
             ) : (
-              <>
-                {selectedFiles.length > 0 &&
-                  selectedFiles.map((file, index) => (
-                    <div
-                      key={index}
-                      className={`h-64 ${
-                        index === currentSlide ? "active" : "hidden"
-                      }`}
-                    >
-                      {file.type.includes("image/") ? (
-                        <img
-                          className="flex flex-center h-full"
-                          src={file.url || URL.createObjectURL(file)}
-                        />
-                      ) : file.type.includes("audio/") ? (
-                        <audio
-                          className="w-full"
-                          controls
-                          src={file.url || URL.createObjectURL(file)}
-                        />
-                      ) : file.type.includes("video/") ? (
-                        <video
-                          className="w-full"
-                          controls
-                          src={file.url || URL.createObjectURL(file)}
-                        />
-                      ) : (
-                        <p>File Name: {file.name}</p>
-                      )}
+              selectedFiles.length > 0 &&
+              selectedFiles.map((file, index) => (
+                <div
+                  key={index}
+                  className={`h-64 flex items-center justify-center ${
+                    index === currentSlide ? "active" : "hidden"
+                  }`}
+                >
+                  {file.type.includes("image/") ? (
+                    <img
+                      className="flex flex-center h-full"
+                      src={file.url || URL.createObjectURL(file)}
+                    />
+                  ) : file.type.includes("audio/") ? (
+                    <audio controls controlsList="nodownload">
+                      <source
+                        src={file.url || URL.createObjectURL(file)}
+                        type={file.type}
+                      />
+                    </audio>
+                  ) : file.type.includes("video/") ? (
+                    <video controls controlsList="nodownload">
+                      <source
+                        src={file.url || URL.createObjectURL(file)}
+                        type={file.type}
+                      />
+                    </video>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center">
+                      <svg
+                        className="w-10 h-10 mb-3 text-gray-400"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 384 512"
+                      >
+                        <path d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128z" />
+                      </svg>
+                      <div className="mb-2 text-sm text-center text-gray-500 dark:text-gray-400">
+                        <span className="font-semibold">File Name:</span>
+                        <p>{file.name}</p>
+                      </div>
                     </div>
-                  ))}
-              </>
+                  )}
+                </div>
+              ))
             )}
 
             <input

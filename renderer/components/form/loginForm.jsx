@@ -5,6 +5,7 @@ import InputPassword from "../input/inputPassword";
 import { getLoginCookie, setCookie } from "../../../utils/cookie";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import errorHanddler from "../../../utils/errorHanddler";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -34,14 +35,7 @@ export default function LoginForm() {
       setCookie("user", loginToken.data.data.refreshToken);
       router.push("/dashboard");
     } catch (error) {
-      if (error.response?.data?.message) {
-        setErrorMessage(error.response.data.message);
-      } else if (error.response?.data?.message === "error validations") {
-        setErrorMessage(error.response.data.path);
-      } else {
-        setErrorMessage(error.message || "something worng please retry");
-      }
-      console.error(error);
+      errorHanddler(error, setErrorMessage);
     }
   };
   return (
