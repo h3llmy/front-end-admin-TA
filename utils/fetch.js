@@ -6,3 +6,9 @@ export const fetchApi = axios.create({
     timeout: 10000,
     headers: { "Content-Type": "application/json" }
 })
+
+export const fetchForm = axios.create({
+    baseURL: config.BASE_API_URL,
+    timeout: 10000,
+    headers: { "Content-Type": "multipart/form-data" }
+})

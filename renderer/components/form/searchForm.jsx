@@ -1,13 +1,14 @@
-export default function SearchForm({
-  handleSubmitCallback = (event) => {
-    event.preventDefault();
-  },
-  handleOnchangeCallback = (event) => {
-    event.preventDefault();
-  },
-}) {
+import { useState } from "react";
+
+export default function SearchForm({ searchTextCallback }) {
   return (
-    <form className="flex items-center pb-6" onSubmit={handleSubmitCallback}>
+    <form
+      className="flex items-center pb-6"
+      onSubmit={(event) => {
+        event.preventDefault();
+        searchTextCallback(event.target.elements.search.value);
+      }}
+    >
       <label htmlFor="search" className="sr-only">
         Search
       </label>
@@ -31,7 +32,12 @@ export default function SearchForm({
           type="text"
           id="search"
           name="search"
-          onChange={handleOnchangeCallback}
+          onChange={(event) => {
+            event.preventDefault();
+            if (event.target.value == "") {
+              searchTextCallback("");
+            }
+          }}
           className="shadow-md bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Search"
         />

@@ -2,87 +2,107 @@ import React, { useEffect, useState } from "react";
 import Table from "../components/table/table";
 import { fetchApi } from "../../utils/fetch";
 import SearchForm from "../components/form/searchForm";
-import UpdateModal from "../components/modal/updateModal";
-import Pagination from "../components/table/pagination";
+import Pagination from "../components/pagination/pagination";
+import { dateConvert } from "../../utils/dateConvert";
+import DiscountForm from "../components/form/discountForm";
 
 export default function Discount() {
   const [discountsList, setDiscountsList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const fetchDiscounts = async () => {
+    try {
+      const [discount] = await Promise.all([
+        fetchApi.get(
+          `/discount/list?page=${currentPage}&limit=10${
+            searchText && `&search=${searchText}`
+          }`
+        ),
+      ]);
+      discount.data.data.list.forEach((discount) => {
+        discount.product = discount.product.name;
+        discount.percentage = `${discount.percentage}%`;
+        discount.startAt = dateConvert(discount.startAt);
+        discount.expiredAt = dateConvert(discount.expiredAt);
+      });
+      setDiscountsList(discount.data.data);
+    } catch (error) {
+      setErrorMessage(error?.response?.data?.message || error.message);
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    const fetching = async () => {
-      try {
-        const [products] = await Promise.all([
-          fetchApi.get(
-            `/discount/list?page=${currentPage}&limit=10${
-              searchText && `&search=${searchText}`
-            }`
-          ),
-        ]);
-        setDiscountsList(products.data.data);
-      } catch (error) {
-        if (error.response && error.response.status === 404) {
-          setDiscountsList({});
-        } else {
-          console.error(error);
-        }
-      }
-    };
-    fetching();
-  }, [currentPage, searchText]);
-
-  const totalPages = discountsList?.totalPages;
-
-  const handlePreviousClick = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleNextClick = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePageClick = (page) => {
-    setCurrentPage(page);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setSearchText(event.target.elements.search.value);
-  };
-
-  const handleOnchange = (event) => {
-    event.preventDefault();
-    if (event.target.value === "") {
-      setSearchText(event);
-    }
-  };
+    fetchDiscounts();
+  }, [currentPage, searchText, errorMessage]);
 
   return (
     <>
       <SearchForm
-        handleSubmitCallback={handleSubmit}
-        handleOnchangeCallback={handleOnchange}
+        searchTextCallback={(search) => {
+          setCurrentPage(1);
+          setSearchText(search);
+        }}
       />
 
       <Table
-        headers={["name", "category", "type"]}
+        headers={["name", "product", "percentage", "startAt", "expiredAt"]}
         data={discountsList?.list}
-        actions={["detail", "update", "delete"]}
+        errorMessage={errorMessage}
+        actions={{
+          detail: (id, modalContent, setModal, setModalTitle) => {
+            setModalTitle("Detail Discount");
+            modalContent(
+              <DiscountForm
+                id={id}
+                disable={true}
+                setModal={(event) => {
+                  setModal(event);
+                }}
+              />
+            );
+          },
+          edit: (id, modalContent, setModal, setModalTitle) => {
+            setModalTitle("Update Discount");
+            modalContent(
+              <DiscountForm
+                id={id}
+                label={"Update"}
+                color={"bg-blue-600 hover:bg-blue-700"}
+                setModal={(event) => {
+                  fetchDiscounts();
+                  setModal(event);
+                }}
+              />
+            );
+          },
+          delete: (id, modalContent, setModal, setModalTitle) => {
+            setModalTitle("Delete Discount");
+            modalContent(
+              <DiscountForm
+                id={id}
+                disable={true}
+                label={"Delete"}
+                color={"bg-[#DC2626] hover:bg-[#B91C1C]"}
+                setModal={(event) => {
+                  fetchDiscounts();
+                  setModal(event);
+                }}
+              />
+            );
+          },
+        }}
       />
 
       <div className="flex flex-row-reverse pt-6">
         {discountsList?.list && (
           <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            handlePreviousClick={handlePreviousClick}
-            handleNextClick={handleNextClick}
-            handlePageClick={handlePageClick}
+            data={discountsList}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+            }}
           />
         )}
       </div>

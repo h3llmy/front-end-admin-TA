@@ -1,12 +1,31 @@
-import React from "react";
+import { useEffect, useState } from "react";
 
-export default function Pagination({
-  currentPage,
-  totalPages,
-  handlePreviousClick,
-  handleNextClick,
-  handlePageClick,
-}) {
+export default function Pagination({ data, onPageChange }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = data?.totalPages;
+
+  const handlePreviousClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
+
+  useEffect(() => {
+    if (totalPages < currentPage) {
+      setCurrentPage(totalPages);
+    }
+  }, [totalPages]);
+
   const displayPages = 5;
   let pageStart = currentPage - Math.floor(displayPages / 2);
   pageStart = Math.max(pageStart, 1);
@@ -30,6 +49,10 @@ export default function Pagination({
       </li>
     );
   }
+
+  useEffect(() => {
+    onPageChange(currentPage);
+  }, [currentPage]);
 
   return (
     <nav aria-label="Page navigation example">

@@ -1,42 +1,93 @@
-import React, { useState } from "react";
-import UpdateModal from "../components/modal/updateModal";
+import React, { useEffect, useState } from "react";
+import Table from "../components/table/table";
+import { fetchApi } from "../../utils/fetch";
+import SearchForm from "../components/form/searchForm";
+import Pagination from "../components/pagination/pagination";
+import { getLoginCookie } from "../../utils/cookie";
+import OrderForm from "../components/form/orderForm";
 
-export default function MyComponent() {
-  const [showModal, setShowModal] = useState(false);
-  const [modalContent, setModalContent] = useState("");
-  const [modalTitle, setModalTitle] = useState("");
+export default function Order() {
+  const [ordersList, setOrdersList] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchText, setSearchText] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleAccept = () => {
-    setShowModal(false);
+  const fetchOrders = async () => {
+    try {
+      const [products] = await Promise.all([
+        fetchApi.get(`/order/list`, {
+          headers: {
+            Authorization: `Bearer ${await getLoginCookie("user")}`,
+          },
+        }),
+      ]);
+      products.data.data.list.forEach((product) => {
+        product.customer = product.customer.username;
+      });
+      setOrdersList(products.data.data);
+    } catch (error) {
+      setErrorMessage(error?.response?.data?.message || error.message);
+      console.error(error);
+    }
   };
 
-  const handleDecline = () => {
-    setShowModal(false);
-  };
-
-  const handleButtonClick = (content, title) => {
-    setModalContent(content);
-    setModalTitle(title);
-    setShowModal(true);
-  };
+  useEffect(() => {
+    fetchOrders();
+  }, [currentPage, searchText, errorMessage]);
 
   return (
     <>
-      <button onClick={() => handleButtonClick("edit", "Edit")}>Edit</button>
-      <button onClick={() => handleButtonClick("detail", "Detail")}>
-        Detail
-      </button>
-      <button onClick={() => handleButtonClick("delete", "Delete")}>
-        Delete
-      </button>
-      {showModal && (
-        <UpdateModal
-          onAccept={handleAccept}
-          onDecline={handleDecline}
-          content={modalContent}
-          title={modalTitle}
-        />
-      )}
+      <SearchForm
+        searchTextCallback={(search) => {
+          setCurrentPage(1);
+          setSearchText(search);
+        }}
+      />
+
+      <Table
+        headers={["customer", "productName", "productType", "orderStatus"]}
+        data={ordersList?.list}
+        errorMessage={errorMessage}
+        actions={{
+          detail: (id, modalContent, setModal, setModalTitle) => {
+            setModalTitle("Detail Order");
+            modalContent(
+              <OrderForm
+                id={id}
+                disable={true}
+                setModal={(event) => {
+                  setModal(event);
+                }}
+              />
+            );
+          },
+          edit: (id, modalContent, setModal, setModalTitle) => {
+            setModalTitle("Update Order");
+            modalContent(
+              <OrderForm
+                id={id}
+                label={"Update"}
+                color={"bg-blue-600 hover:bg-blue-700"}
+                setModal={(event) => {
+                  fetchOrders();
+                  setModal(event);
+                }}
+              />
+            );
+          },
+        }}
+      />
+
+      <div className="flex flex-row-reverse pt-6">
+        {ordersList?.list && (
+          <Pagination
+            data={ordersList}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+            }}
+          />
+        )}
+      </div>
     </>
   );
 }

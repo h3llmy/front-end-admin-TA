@@ -1,6 +1,6 @@
 appId: com.example.nextron
 productName: Admin Semua Aplikasi Indonesia
-copyright: Copyright © 2018 Yoshihide Shiono
+copyright: Copyright © 2023 Admin Semua Aplikasi Indonesia
 directories:
   output: dist
   buildResources: resources
