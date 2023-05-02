@@ -9,6 +9,7 @@ import { getLoginCookie } from "../../../utils/cookie";
 
 export default function OrderForm({ id, setModal, disable, label, color }) {
   const [order, setOrder] = useState({});
+  const [orderStatus, setOrderStatus] = useState("");
   const [errorMessage, setErrorMessage] = useState({});
 
   const getOrderDetail = async () => {
@@ -34,15 +35,19 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await fetchApi.put(`/order/update/${id}`, order, {
+      await fetchApi.put(`/order/update-status/${id}/${orderStatus}`, order, {
         headers: {
           Authorization: `Bearer ${await getLoginCookie("user")}`,
         },
       });
       setModal(false);
     } catch (error) {
-      if (error?.response?.data?.message === "error validations") {
+      if (error.response?.data?.message) {
+        setErrorMessage(error.response.data.message);
+      } else if (error?.response?.data?.message === "error validations") {
         setErrorMessage(error.response.data.path);
+      } else {
+        setErrorMessage(error.message || "something worng please retry");
       }
       console.error(error);
     }
@@ -102,9 +107,10 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
             name={"Order Status"}
             defaultValue={order?.orderStatus}
             inputValue={(value) => {
-              order.orderStatus = value;
+              // order.orderStatus = value;
+              setOrderStatus(value);
             }}
-            disable={disable}
+            disable={disable && order?.orderStatus !== "done"}
             onError={errorMessage.orderStatus}
           />
           <InputNumber
@@ -143,10 +149,13 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
               order.note
             }
             inputValue={(value) => {
-              order.revisionNote = value;
+              // order.revisionNote = value;
             }}
             disable={true}
-            onError={errorMessage.revisionNote}
+            onError={
+              errorMessage.revisionNote ||
+              (typeof errorMessage == "string" && errorMessage)
+            }
           />
         </div>
 

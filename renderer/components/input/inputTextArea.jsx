@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 export default function InputTextArea({
   name,
   defaultValue,
@@ -6,6 +8,11 @@ export default function InputTextArea({
   autoFocus,
   disable,
 }) {
+  useEffect(() => {
+    if (defaultValue) {
+      inputValue(defaultValue);
+    }
+  }, [defaultValue]);
   const inputProps = {
     defaultValue: defaultValue || null,
     rows: "4",

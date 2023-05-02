@@ -1,14 +1,15 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchApi } from "../../../utils/fetch";
 import ModalButton from "../button/modalButton";
 import InputText from "../input/inputText";
 import InputNumber from "../input/inputNumber";
 import InputTextArea from "../input/inputTextArea";
 import { getLoginCookie } from "../../../utils/cookie";
-import Test from "../../pages/test";
+import InputMultipleFiles from "../input/inputMultipleFiles";
 
 export default function ProductForm({ id, setModal, disable, label, color }) {
   const [product, setProduct] = useState({});
+  const [productImages, setProductImages] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
 
   const getProductDetail = async () => {
@@ -32,7 +33,19 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
     try {
       switch (label.toLowerCase()) {
         case "update":
-          await fetchApi.put(`/product/update/${id}`, product, {
+          const formData = new FormData();
+          formData.append("name", product.name);
+          formData.append("price", product.price);
+          formData.append("type", product.type);
+          formData.append("category", product.category);
+          formData.append("maxRevision", product.maxRevision);
+          formData.append("dayWork", product.dayWork);
+          formData.append("descryption", product.descryption);
+          productImages.forEach((productImage) => {
+            formData.append("productFile", productImage);
+          });
+
+          await fetchApi.put(`/product/update/${id}`, formData, {
             headers: {
               Authorization: `Bearer ${await getLoginCookie("user")}`,
             },
@@ -106,17 +119,22 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
             onError={errorMessage.maxRevision}
           />
           <InputNumber
-            name={"Day Worok"}
-            defaultValue={product.dayWorok}
+            name={"Day Work"}
+            defaultValue={product.dayWork}
             inputValue={(value) => {
-              product.dayWorok = value;
+              product.dayWork = value;
             }}
             disable={disable}
-            onError={errorMessage.dayWorok}
+            onError={errorMessage.dayWork}
           />
         </div>
         <div className="mt-5">
-          <Test disable={disable} />
+          <InputMultipleFiles
+            inputValue={setProductImages}
+            defaultValue={product.productUrl}
+            name={"Product Display"}
+            disable={disable}
+          />
         </div>
         <div className="mt-5">
           <InputTextArea

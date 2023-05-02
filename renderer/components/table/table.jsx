@@ -6,7 +6,7 @@ function Table({ headers, data, actions, errorMessage }) {
   const [modalContent, setModalContent] = useState("");
   const [modalTitle, setModalTitle] = useState("");
 
-  const MAX_LENGTH = 15;
+  const maxLength = 15;
 
   const stringDisplay = (string) => {
     return string
@@ -38,7 +38,16 @@ function Table({ headers, data, actions, errorMessage }) {
             </tr>
           </thead>
           <tbody>
-            {data && data.length > 0 ? (
+            {errorMessage ? (
+              <tr>
+                <td
+                  className="px-6 py-4 font-medium text-center bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-[#DC2626] whitespace-nowrap dark:text-[#DC2626]"
+                  colSpan={newHeaders.length + (actions ? 1 : 0)}
+                >
+                  {errorMessage}
+                </td>
+              </tr>
+            ) : data && data.length > 0 ? (
               data.map((row) => (
                 <tr
                   key={row._id}
@@ -49,8 +58,8 @@ function Table({ headers, data, actions, errorMessage }) {
                       key={column.key}
                       className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {row[column.key]?.length > MAX_LENGTH
-                        ? `${row[column.key].substring(0, MAX_LENGTH)}...`
+                      {row[column.key]?.length > maxLength
+                        ? `${row[column.key].substring(0, maxLength)}...`
                         : row[column.key] || ""}
                     </td>
                   ))}
@@ -87,13 +96,9 @@ function Table({ headers, data, actions, errorMessage }) {
                   className="px-6 py-4 font-medium text-center bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-[#DC2626] whitespace-nowrap dark:text-[#DC2626]"
                   colSpan={newHeaders.length + (actions ? 1 : 0)}
                 >
-                  {errorMessage ? (
-                    errorMessage
-                  ) : (
-                    <div className="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 animate-pulse dark:text-blue-200">
-                      loading...
-                    </div>
-                  )}
+                  <div className="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 animate-pulse dark:text-blue-200">
+                    loading...
+                  </div>
                 </td>
               </tr>
             )}

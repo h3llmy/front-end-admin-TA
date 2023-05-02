@@ -1,18 +1,28 @@
 import { useState, useEffect } from "react";
 
-export default function Test({ disable }) {
+export default function InputMultipleFiles({
+  disable,
+  name,
+  inputValue,
+  defaultValue,
+}) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const fetchFile = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:3000/image/1682770186550-1682386288399.jpeg"
-      );
-      const blob = await response.blob();
-      const file = new File([blob], "filename.jpg", { type: blob.type });
-      setCurrentSlide(selectedFiles.length);
-      setSelectedFiles([...selectedFiles, file]);
+      if (defaultValue && Array.isArray(defaultValue)) {
+        const files = await Promise.all(
+          defaultValue.map(async (value) => {
+            const fileName = value.split(/[/|-]+/).pop();
+            const response = await fetch(value);
+            const blob = await response.blob();
+            return new File([blob], fileName, { type: blob.type });
+          })
+        );
+        setCurrentSlide(selectedFiles.length);
+        setSelectedFiles([...selectedFiles, ...files]);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -20,7 +30,11 @@ export default function Test({ disable }) {
 
   useEffect(() => {
     fetchFile();
-  }, []);
+  }, [defaultValue]);
+
+  useEffect(() => {
+    inputValue(selectedFiles);
+  }, [selectedFiles]);
 
   const handleFileSelect = (event) => {
     event.preventDefault();
@@ -60,6 +74,12 @@ export default function Test({ disable }) {
 
   return (
     <>
+      <label
+        htmlFor="dropzone-file"
+        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >
+        {name}
+      </label>
       <div
         className="relative w-full"
         onDrop={handleFileDrop}
@@ -150,7 +170,7 @@ export default function Test({ disable }) {
                           src={file.url || URL.createObjectURL(file)}
                         />
                       ) : (
-                        <p>File type: {file.type}</p>
+                        <p>File Name: {file.name}</p>
                       )}
                     </div>
                   ))}

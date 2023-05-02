@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 export default function InputPassword({
   name,
   defaultValue,
@@ -6,6 +8,11 @@ export default function InputPassword({
   autoFocus,
   disable,
 }) {
+  useEffect(() => {
+    if (defaultValue) {
+      inputValue(defaultValue);
+    }
+  }, [defaultValue]);
   const inputProps = {
     type: "date",
     defaultValue:
