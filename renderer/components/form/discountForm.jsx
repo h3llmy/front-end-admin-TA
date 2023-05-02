@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { fetchApi } from "../../../utils/fetch";
-import ModalButton from "../button/modalButton";
+import ModalFormButton from "../button/modalFormButton";
 import InputText from "../input/inputText";
 import InputNumber from "../input/inputNumber";
 import { getLoginCookie } from "../../../utils/cookie";
 import InputDate from "../input/inputDate";
 import InputDropdown from "../input/inputDropdown";
+import errorHanddler from "../../../utils/errorHanddler";
 
 export default function DiscountForm({ id, setModal, disable, label, color }) {
   const [discount, setDiscount] = useState({});
@@ -64,8 +65,7 @@ export default function DiscountForm({ id, setModal, disable, label, color }) {
       }
       setModal(false);
     } catch (error) {
-      setErrorMessage(error?.response?.data?.path);
-      console.error(error);
+      errorHanddler(error, setErrorMessage);
     }
   };
 
@@ -133,7 +133,7 @@ export default function DiscountForm({ id, setModal, disable, label, color }) {
           />
         </div>
 
-        <ModalButton
+        <ModalFormButton
           onDecline={() => {
             setModal(false);
           }}

@@ -5,6 +5,7 @@ import SearchForm from "../components/form/searchForm";
 import Pagination from "../components/pagination/pagination";
 import { getLoginCookie } from "../../utils/cookie";
 import OrderForm from "../components/form/orderForm";
+import errorHanddler from "../../utils/errorHanddler";
 
 export default function Order() {
   const [ordersList, setOrdersList] = useState({});
@@ -32,8 +33,7 @@ export default function Order() {
       setOrdersList(products.data.data);
       setErrorMessage("");
     } catch (error) {
-      setErrorMessage(error?.response?.data?.message || error.message);
-      console.error(error);
+      errorHanddler(error, setErrorMessage);
     }
   };
 

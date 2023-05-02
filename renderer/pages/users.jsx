@@ -4,24 +4,35 @@ import { fetchApi } from "../../utils/fetch";
 import SearchForm from "../components/form/searchForm";
 import Pagination from "../components/pagination/pagination";
 import ProductForm from "../components/form/productForm";
+import { getLoginCookie } from "../../utils/cookie";
+import { dateConvert } from "../../utils/dateConvert";
 import errorHanddler from "../../utils/errorHanddler";
 
-export default function Product() {
-  const [productsList, setProductsList] = useState({});
+export default function Users() {
+  const [usersList, setUsersList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const fetchProducts = async () => {
+  const fetchUsers = async () => {
     try {
-      const [products] = await Promise.all([
+      const [users] = await Promise.all([
         fetchApi.get(
-          `/product/list?page=${currentPage}&limit=10${
+          `/user/list?page=${currentPage}&limit=10${
             searchText && `&search=${searchText}`
-          }`
+          }`,
+          {
+            headers: {
+              Authorization: `Bearer ${await getLoginCookie("user")}`,
+            },
+          }
         ),
       ]);
-      setProductsList(products.data.data);
+      users.data.data.list.forEach((user) => {
+        user.isActive = user.isActive ? "Active" : "Not Active";
+        user.createdAt = dateConvert(user.createdAt);
+      });
+      setUsersList(users.data.data);
       setErrorMessage("");
     } catch (error) {
       errorHanddler(error, setErrorMessage);
@@ -29,21 +40,23 @@ export default function Product() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchUsers();
   }, [currentPage, searchText, errorMessage]);
 
   return (
     <>
-      <SearchForm
-        searchTextCallback={(search) => {
-          setCurrentPage(1);
-          setSearchText(search);
-        }}
-      />
+      <div className="pb-6">
+        <SearchForm
+          searchTextCallback={(search) => {
+            setCurrentPage(1);
+            setSearchText(search);
+          }}
+        />
+      </div>
 
       <Table
-        headers={["name", "category", "type", "price"]}
-        data={productsList?.list}
+        headers={["username", "email", "createdAt", "isActive"]}
+        data={usersList?.list}
         errorMessage={errorMessage}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
@@ -60,7 +73,7 @@ export default function Product() {
                 label={"Update"}
                 color={"bg-blue-600 hover:bg-blue-700"}
                 setModal={(event) => {
-                  fetchProducts();
+                  fetchUsers();
                   setModal(event);
                 }}
               />
@@ -75,7 +88,7 @@ export default function Product() {
                 label={"Delete"}
                 color={"bg-[#DC2626] hover:bg-[#B91C1C]"}
                 setModal={(event) => {
-                  fetchProducts();
+                  fetchUsers();
                   setModal(event);
                 }}
               />
@@ -85,8 +98,8 @@ export default function Product() {
       />
 
       <div className="flex flex-row-reverse pt-6">
-        {productsList?.list && (
-          <Pagination data={productsList} onPageChange={setCurrentPage} />
+        {usersList?.list && (
+          <Pagination data={usersList} onPageChange={setCurrentPage} />
         )}
       </div>
     </>
