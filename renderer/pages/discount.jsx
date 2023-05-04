@@ -6,6 +6,7 @@ import Pagination from "../components/pagination/pagination";
 import { dateConvert } from "../../utils/dateConvert";
 import DiscountForm from "../components/form/discountForm";
 import errorHanddler from "../../utils/errorHanddler";
+import ModalButton from "../components/button/modalButton";
 
 export default function Discount() {
   const [discountsList, setDiscountsList] = useState({});
@@ -47,6 +48,27 @@ export default function Discount() {
           setSearchText(search);
         }}
       />
+
+      <div className="flex justify-end py-3">
+        <ModalButton
+          title={"Create Discount"}
+          label={"Create Discount"}
+          color={"bg-blue-600 hover:bg-blue-700"}
+          content={(setModalContent, setModals) => {
+            setModalContent(
+              <DiscountForm
+                label={"Create"}
+                color={"bg-blue-600 hover:bg-blue-700"}
+                setModal={(value) => {
+                  fetchDiscounts();
+                  setCurrentPage(1);
+                  setModals(value);
+                }}
+              />
+            );
+          }}
+        />
+      </div>
 
       <Table
         headers={["name", "product", "percentage", "startAt", "expiredAt"]}

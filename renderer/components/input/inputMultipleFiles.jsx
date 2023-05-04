@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import ProgressBar from "../loading/progressBar";
 
 export default function InputMultipleFiles({
   disable,
   name,
   inputValue,
   defaultValue,
+  process,
 }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -20,8 +22,8 @@ export default function InputMultipleFiles({
             return new File([blob], fileName, { type: blob.type });
           })
         );
-        setCurrentSlide(selectedFiles.length);
         setSelectedFiles([...selectedFiles, ...files]);
+        setCurrentSlide(selectedFiles.length);
       }
     } catch (error) {
       console.error(error);
@@ -198,7 +200,7 @@ export default function InputMultipleFiles({
           </label>
         </div>
         <div className="flex items-center justify-center w-full">
-          {selectedFiles.length > 0 && !disable && (
+          {selectedFiles.length > 0 && !disable && process <= 0 && (
             <button
               onClick={(event) => {
                 event.preventDefault();
@@ -210,6 +212,7 @@ export default function InputMultipleFiles({
           )}
         </div>
       </div>
+      {process > 0 && <ProgressBar progress={process} />}
     </>
   );
 }

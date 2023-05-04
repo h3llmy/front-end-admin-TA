@@ -11,6 +11,7 @@ import errorHanddler from "../../../utils/errorHanddler";
 export default function ProductForm({ id, setModal, disable, label, color }) {
   const [product, setProduct] = useState({});
   const [productImages, setProductImages] = useState({});
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [errorMessage, setErrorMessage] = useState({});
 
   const getProductDetail = async () => {
@@ -26,27 +27,52 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
   };
 
   useEffect(() => {
-    getProductDetail();
+    if (label?.toLowerCase() !== "create") {
+      getProductDetail();
+    }
   }, [id]);
+
+  const getFormData = () => {
+    const createFormData = new FormData();
+    createFormData.append("name", product.name);
+    createFormData.append("price", product.price);
+    createFormData.append("type", product.type);
+    createFormData.append("category", product.category);
+    createFormData.append("maxRevision", product.maxRevision);
+    createFormData.append("dayWork", product.dayWork);
+    createFormData.append("descryption", product.descryption);
+    productImages.forEach((productImage) => {
+      createFormData.append("productFile", productImage);
+    });
+
+    return createFormData;
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      switch (label.toLowerCase()) {
-        case "update":
-          const formData = new FormData();
-          formData.append("name", product.name);
-          formData.append("price", product.price);
-          formData.append("type", product.type);
-          formData.append("category", product.category);
-          formData.append("maxRevision", product.maxRevision);
-          formData.append("dayWork", product.dayWork);
-          formData.append("descryption", product.descryption);
-          productImages.forEach((productImage) => {
-            formData.append("productFile", productImage);
+      switch (label?.toLowerCase()) {
+        case "create":
+          await fetchApi.post(`/product/add`, getFormData(), {
+            onUploadProgress: (progressEvent) => {
+              const percentage = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setUploadProgress(percentage);
+            },
+            headers: {
+              Authorization: `Bearer ${await getLoginCookie("user")}`,
+            },
           });
-
-          await fetchApi.put(`/product/update/${id}`, formData, {
+          break;
+        case "update":
+          await fetchApi.put(`/product/update/${id}`, getFormData(), {
+            onUploadProgress: (progressEvent) => {
+              const percentage = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setUploadProgress(percentage);
+            },
             headers: {
               Authorization: `Bearer ${await getLoginCookie("user")}`,
             },
@@ -58,6 +84,7 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
               Authorization: `Bearer ${await getLoginCookie("user")}`,
             },
           });
+
           break;
       }
       setModal(false);
@@ -132,6 +159,7 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
             defaultValue={product.productUrl}
             name={"Product Display"}
             disable={disable}
+            process={uploadProgress}
           />
         </div>
         <div className="mt-5">

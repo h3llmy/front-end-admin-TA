@@ -14,6 +14,7 @@ export const setCookie = (name, token) => {
     throw new Error("Unauthorized");
   }
 };
+
 export const getLoginCookie = async (name) => {
   try {
     const myCookie = session.get(name);

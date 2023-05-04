@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export default function InputPassword({
+export default function InputDate({
   name,
   defaultValue,
   inputValue,

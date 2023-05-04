@@ -8,6 +8,7 @@ import {
   Tooltip,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import LoadingAnimation from "../loading/loadingAnimation";
 
 export default function LineChart({ labels, data, title }) {
   ChartJS.register(
@@ -42,5 +43,15 @@ export default function LineChart({ labels, data, title }) {
     ],
   };
 
-  return <Line options={options} data={chartData} />;
+  return (
+    <>
+      {data ? (
+        <Line options={options} data={chartData} />
+      ) : (
+        <div className="h-full flex justify-center">
+          <LoadingAnimation />
+        </div>
+      )}
+    </>
+  );
 }

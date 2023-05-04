@@ -3,10 +3,10 @@ import Table from "../components/table/table";
 import { fetchApi } from "../../utils/fetch";
 import SearchForm from "../components/form/searchForm";
 import Pagination from "../components/pagination/pagination";
-import ProductForm from "../components/form/productForm";
 import { getLoginCookie } from "../../utils/cookie";
 import { dateConvert } from "../../utils/dateConvert";
 import errorHanddler from "../../utils/errorHanddler";
+import UserForm from "../components/form/userForm";
 
 export default function Users() {
   const [usersList, setUsersList] = useState({});
@@ -29,7 +29,8 @@ export default function Users() {
         ),
       ]);
       users.data.data.list.forEach((user) => {
-        user.isActive = user.isActive ? "Active" : "Not Active";
+        user.status = user.isActive ? "Active" : "Not Active";
+        delete user.isActive;
         user.createdAt = dateConvert(user.createdAt);
       });
       setUsersList(users.data.data);
@@ -55,20 +56,20 @@ export default function Users() {
       </div>
 
       <Table
-        headers={["username", "email", "createdAt", "isActive"]}
+        headers={["username", "email", "createdAt", "status"]}
         data={usersList?.list}
         errorMessage={errorMessage}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Product");
             modalContent(
-              <ProductForm id={id} disable={true} setModal={setModal} />
+              <UserForm id={id} disable={true} setModal={setModal} />
             );
           },
           edit: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Product");
             modalContent(
-              <ProductForm
+              <UserForm
                 id={id}
                 label={"Update"}
                 color={"bg-blue-600 hover:bg-blue-700"}
@@ -79,13 +80,18 @@ export default function Users() {
               />
             );
           },
-          delete: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Delete Product");
+          "activate/deactivate": (
+            id,
+            modalContent,
+            setModal,
+            setModalTitle
+          ) => {
+            setModalTitle("Update Status");
             modalContent(
-              <ProductForm
+              <UserForm
                 id={id}
                 disable={true}
-                label={"Delete"}
+                label={"Update Status"}
                 color={"bg-[#DC2626] hover:bg-[#B91C1C]"}
                 setModal={(event) => {
                   fetchUsers();

@@ -18,8 +18,8 @@ export default function DashboardLayout({ children }) {
     <React.Fragment>
       <Navbar />
       <Sidebar />
-      <div className="p-4 ml-64">
-        <div className="p-4 mt-14 max-h-screen">{children}</div>
+      <div className="ml-64">
+        <div className="p-5 mt-14 max-h-screen">{children}</div>
       </div>
     </React.Fragment>
   );
