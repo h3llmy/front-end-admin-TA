@@ -84,7 +84,6 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
               Authorization: `Bearer ${await getLoginCookie("user")}`,
             },
           });
-
           break;
       }
       setModal(false);

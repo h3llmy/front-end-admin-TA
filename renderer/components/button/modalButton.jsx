@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
 import Modal from "../modal/modal";
 
-export default function ModalButton({
-  label,
-  title,
-  content,
-  color,
-  setModal,
-}) {
+export default function ModalButton({ label, title, content, color }) {
   const [showModal, setShowModal] = useState(false);
   const [showContent, setModalContents] = useState(false);
   useEffect(() => {
     content(setModalContents, setShowModal);
-  }, [setModal]);
+  }, []);
   return (
     <>
       <button

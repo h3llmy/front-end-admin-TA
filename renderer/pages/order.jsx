@@ -6,6 +6,8 @@ import Pagination from "../components/pagination/pagination";
 import { getLoginCookie } from "../../utils/cookie";
 import OrderForm from "../components/form/orderForm";
 import errorHanddler from "../../utils/errorHanddler";
+import ModalButton from "../components/button/modalButton";
+import ReportForm from "../components/form/reportForm";
 
 export default function Order() {
   const [ordersList, setOrdersList] = useState({});
@@ -49,6 +51,27 @@ export default function Order() {
           setSearchText(search);
         }}
       />
+
+      <div className="flex justify-end py-3">
+        <ModalButton
+          title={"Create Report"}
+          label={"Create Report"}
+          color={"bg-blue-600 hover:bg-blue-700"}
+          content={(setModalContent, setModals) => {
+            setModalContent(
+              <ReportForm
+                label={"Create"}
+                color={"bg-blue-600 hover:bg-blue-700"}
+                setModal={(value) => {
+                  fetchOrders();
+                  setCurrentPage(1);
+                  setModals(value);
+                }}
+              />
+            );
+          }}
+        />
+      </div>
 
       <Table
         headers={["customer", "productName", "productType", "orderStatus"]}
