@@ -1,10 +1,14 @@
 export default (error, setErrorMessage) => {
+  let errorMessage = "something went wrong, please retry";
+
   if (error.response?.data?.path) {
-    setErrorMessage(error.response.data.path);
+    errorMessage = error.response.data.path;
   } else if (error.response?.data?.message) {
-    setErrorMessage(error.response.data.message);
-  } else {
-    setErrorMessage(error.message || "something worng please retry");
+    errorMessage = error.response.data.message;
+  } else if (error?.message) {
+    errorMessage = error.message;
   }
+
+  setErrorMessage(errorMessage);
   console.error(error);
 };

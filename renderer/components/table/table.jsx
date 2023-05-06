@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Modal from "../modal/modal";
+import LoadingAnimation from "../loading/loadingAnimation";
 
-function Table({ headers, data, actions, errorMessage }) {
+function Table({ headers, data, actions, errorMessage, stringLength }) {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [modalTitle, setModalTitle] = useState("");
 
-  const maxLength = 15;
+  const maxLength = stringLength || 15;
 
   const stringDisplay = (string) => {
     return string
@@ -94,9 +95,7 @@ function Table({ headers, data, actions, errorMessage }) {
                   className="px-6 py-4 font-medium text-center bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-[#DC2626] whitespace-nowrap dark:text-[#DC2626]"
                   colSpan={newHeaders.length + (actions ? 1 : 0)}
                 >
-                  <div className="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 animate-pulse dark:text-blue-200">
-                    loading...
-                  </div>
+                  <LoadingAnimation />
                 </td>
               </tr>
             )}

@@ -5,6 +5,8 @@ import SearchForm from "../components/form/searchForm";
 import Pagination from "../components/pagination/pagination";
 import ProductForm from "../components/form/productForm";
 import errorHanddler from "../../utils/errorHanddler";
+import { getLoginCookie } from "../../utils/cookie";
+import ModalButton from "../components/button/modalButton";
 
 export default function Product() {
   const [productsList, setProductsList] = useState({});
@@ -18,7 +20,12 @@ export default function Product() {
         fetchApi.get(
           `/product/list?page=${currentPage}&limit=10${
             searchText && `&search=${searchText}`
-          }`
+          }`,
+          {
+            headers: {
+              Authorization: `Bearer ${await getLoginCookie("user")}`,
+            },
+          }
         ),
       ]);
       setProductsList(products.data.data);
@@ -40,6 +47,27 @@ export default function Product() {
           setSearchText(search);
         }}
       />
+
+      <div className="flex justify-end py-3">
+        <ModalButton
+          title={"Create Product"}
+          label={"Create Product"}
+          color={"bg-blue-600 hover:bg-blue-700"}
+          content={(setModalContent, setModals) => {
+            setModalContent(
+              <ProductForm
+                label={"Create"}
+                color={"bg-blue-600 hover:bg-blue-700"}
+                setModal={(value) => {
+                  fetchProducts();
+                  setCurrentPage(1);
+                  setModals(value);
+                }}
+              />
+            );
+          }}
+        />
+      </div>
 
       <Table
         headers={["name", "category", "type", "price"]}

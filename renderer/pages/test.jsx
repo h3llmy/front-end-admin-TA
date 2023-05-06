@@ -1,10 +1,11 @@
+import { useState } from "react";
+import ProgressBar from "../components/loading/progressBar";
+
 export default function Test() {
-  return (
-    <audio controls>
-      <source
-        src="http://localhost:3000/audio/1683045719200-a.mp3"
-        type="audio/mpeg"
-      />
-    </audio>
-  );
+  const [uploadProgress, setUploadProgress] = useState(0);
+  setInterval(() => {
+    const randomNumber = Math.floor(Math.random() * 101);
+    setUploadProgress(randomNumber);
+  });
+  return <ProgressBar progress={uploadProgress} />;
 }

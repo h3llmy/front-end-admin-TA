@@ -1,13 +1,21 @@
 import { useState, useEffect } from "react";
+import ProgressBar from "../loading/progressBar";
+import axios from "axios";
 
 export default function InputMultipleFiles({
   disable,
   name,
   inputValue,
   defaultValue,
+  process,
 }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+
+  useEffect(() => {
+    setLoadingProgress(process);
+  }, [process]);
 
   const fetchFile = async () => {
     try {
@@ -15,13 +23,22 @@ export default function InputMultipleFiles({
         const files = await Promise.all(
           defaultValue.map(async (value) => {
             const fileName = value.split(/[/|-]+/).pop();
-            const response = await fetch(value);
-            const blob = await response.blob();
-            return new File([blob], fileName, { type: blob.type });
+            const response = await axios.get(value, {
+              responseType: "blob",
+              onDownloadProgress: (progressEvent) => {
+                const percentCompleted = Math.round(
+                  (progressEvent.loaded * 100) / progressEvent.total
+                );
+                setLoadingProgress(percentCompleted);
+              },
+            });
+            return new File([response.data], fileName, {
+              type: response.data.type,
+            });
           })
         );
-        setCurrentSlide(selectedFiles.length);
         setSelectedFiles([...selectedFiles, ...files]);
+        setCurrentSlide(selectedFiles.length);
       }
     } catch (error) {
       console.error(error);
@@ -116,7 +133,10 @@ export default function InputMultipleFiles({
         <div className="flex items-center justify-center w-full">
           <label
             htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            className="
+              flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer 
+              bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600
+            "
           >
             {selectedFiles.length === 0 ? (
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -198,7 +218,7 @@ export default function InputMultipleFiles({
           </label>
         </div>
         <div className="flex items-center justify-center w-full">
-          {selectedFiles.length > 0 && !disable && (
+          {selectedFiles.length > 0 && !disable && loadingProgress <= 0 && (
             <button
               onClick={(event) => {
                 event.preventDefault();
@@ -210,6 +230,7 @@ export default function InputMultipleFiles({
           )}
         </div>
       </div>
+      {<ProgressBar progress={loadingProgress} />}
     </>
   );
 }

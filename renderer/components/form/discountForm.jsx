@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchApi } from "../../../utils/fetch";
 import ModalFormButton from "../button/modalFormButton";
 import InputText from "../input/inputText";
@@ -41,13 +41,22 @@ export default function DiscountForm({ id, setModal, disable, label, color }) {
 
   useEffect(() => {
     getProductLists();
-    getDiscountDetail();
+    if (label?.toLowerCase() !== "create") {
+      getDiscountDetail();
+    }
   }, [id]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      switch (label.toLowerCase()) {
+      switch (label?.toLowerCase()) {
+        case "create":
+          await fetchApi.post(`/discount/add`, discount, {
+            headers: {
+              Authorization: `Bearer ${await getLoginCookie("user")}`,
+            },
+          });
+          break;
         case "update":
           await fetchApi.put(`/discount/update/${id}`, discount, {
             headers: {
@@ -55,7 +64,7 @@ export default function DiscountForm({ id, setModal, disable, label, color }) {
             },
           });
           break;
-        case "delete":
+        case "activate/deactivate":
           await fetchApi.delete(`/discount/delete/${id}`, {
             headers: {
               Authorization: `Bearer ${await getLoginCookie("user")}`,
@@ -122,15 +131,15 @@ export default function DiscountForm({ id, setModal, disable, label, color }) {
             disable={disable}
             onError={errorMessage?.expiredAt}
           />
-          <InputDate
-            name={"created At"}
-            defaultValue={discount?.createdAt}
-            inputValue={(value) => {
-              // discount.createdAt = value;
-            }}
-            disable={true}
-            onError={errorMessage?.createdAt}
-          />
+          {label?.toLowerCase() !== "create" && (
+            <InputDate
+              name={"created At"}
+              defaultValue={discount?.createdAt}
+              inputValue={(value) => {}}
+              disable={true}
+              onError={errorMessage?.createdAt}
+            />
+          )}
         </div>
 
         <ModalFormButton

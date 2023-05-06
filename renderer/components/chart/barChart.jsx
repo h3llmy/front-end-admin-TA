@@ -8,6 +8,7 @@ import {
   BarController,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import LoadingAnimation from "../loading/loadingAnimation";
 
 export default function BarChart({ labels, data, title }) {
   ChartJS.register(
@@ -43,5 +44,15 @@ export default function BarChart({ labels, data, title }) {
     aspectRatio: 2.5,
   };
 
-  return <Bar options={options} data={chartData} />;
+  return (
+    <>
+      {data ? (
+        <Bar options={options} data={chartData} />
+      ) : (
+        <div className="h-full flex justify-center">
+          <LoadingAnimation />
+        </div>
+      )}
+    </>
+  );
 }
