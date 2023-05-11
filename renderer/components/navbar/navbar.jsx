@@ -29,11 +29,11 @@ export default function Navbar() {
         <div className="px-3 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start">
-              <img
+              {/* <img
                 src="/images/blip_footer.png"
                 className="h-8 mr-3"
                 alt="Logo"
-              />
+              /> */}
               <span className="self-center font-semibold text-2xl whitespace-nowrap dark:text-white text-gray-900">
                 Admin Semua Aplikasi Indonesia
               </span>

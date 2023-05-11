@@ -34,15 +34,23 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
 
   const getFormData = () => {
     const createFormData = new FormData();
-    createFormData.append("name", product.name);
-    createFormData.append("price", product.price);
-    createFormData.append("type", product.type);
-    createFormData.append("category", product.category);
-    createFormData.append("maxRevision", product.maxRevision);
-    createFormData.append("dayWork", product.dayWork);
-    createFormData.append("descryption", product.descryption);
+
+    const checkValue = (key, value) => {
+      if (value !== null && value !== undefined) {
+        createFormData.append(key, value);
+      }
+    };
+
+    checkValue("name", product.name);
+    checkValue("price", product.price);
+    checkValue("type", product.type);
+    checkValue("category", product.category);
+    checkValue("maxRevision", product.maxRevision);
+    checkValue("dayWork", product.dayWork);
+    checkValue("descryption", product.descryption);
+
     productImages.forEach((productImage) => {
-      createFormData.append("productFile", productImage);
+      checkValue("productFile", productImage);
     });
 
     return createFormData;
@@ -159,6 +167,7 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
             name={"Product Display"}
             disable={disable}
             process={uploadProgress}
+            downloadAble={true}
           />
         </div>
         <div className="mt-5">

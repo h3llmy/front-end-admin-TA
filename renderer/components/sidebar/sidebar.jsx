@@ -143,7 +143,7 @@ export default function Sidebar() {
                     ></path>
                   </svg>
                 }
-                name={"Login"}
+                name={"Logout"}
               />
             </li>
           </ul>

@@ -55,6 +55,7 @@ export default function ReportForm({ label, color, setModal }) {
         <InputDate
           name={"Until"}
           inputValue={setUntil}
+          defaultValue={new Date().toDateString()}
           disable={false}
           onError={errorMessage?.until}
         />
