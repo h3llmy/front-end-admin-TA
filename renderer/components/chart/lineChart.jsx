@@ -28,6 +28,9 @@ export default function LineChart({ labels, data, title }) {
         display: true,
         text: title,
       },
+      legend: {
+        display: false,
+      },
     },
     aspectRatio: 2.5,
   };

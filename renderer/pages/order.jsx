@@ -74,7 +74,7 @@ export default function Order() {
       </div>
 
       <Table
-        headers={["customer", "productName", "productType", "orderStatus"]}
+        headers={["customer", "productName", "orderStatus"]}
         data={ordersList?.list}
         errorMessage={errorMessage}
         actions={{

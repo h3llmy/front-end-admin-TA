@@ -7,12 +7,24 @@ import InputTextArea from "../input/inputTextArea";
 import { getLoginCookie } from "../../../utils/cookie";
 import InputMultipleFiles from "../input/inputMultipleFiles";
 import errorHanddler from "../../../utils/errorHanddler";
+import InputDropdown from "../input/inputDropdown";
 
 export default function ProductForm({ id, setModal, disable, label, color }) {
   const [product, setProduct] = useState({});
+  const [categories, setCategories] = useState({});
   const [productImages, setProductImages] = useState({});
   const [uploadProgress, setUploadProgress] = useState(0);
   const [errorMessage, setErrorMessage] = useState({});
+
+  const getCategories = async () => {
+    try {
+      const getCategories = await fetchApi.get("/categories/list");
+      setCategories(getCategories.data.data.list);
+    } catch (error) {
+      errorHanddler(error, setErrorMessage);
+      console.error(error);
+    }
+  };
 
   const getProductDetail = async () => {
     try {
@@ -22,11 +34,13 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
       const { data } = dataProduct.data;
       setProduct(data);
     } catch (error) {
+      errorHanddler(error, setErrorMessage);
       console.error(error);
     }
   };
 
   useEffect(() => {
+    getCategories();
     if (label?.toLowerCase() !== "create") {
       getProductDetail();
     }
@@ -43,7 +57,6 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
 
     checkValue("name", product.name);
     checkValue("price", product.price);
-    checkValue("type", product.type);
     checkValue("category", product.category);
     checkValue("maxRevision", product.maxRevision);
     checkValue("dayWork", product.dayWork);
@@ -123,23 +136,17 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
             disable={disable}
             onError={errorMessage.price}
           />
-          <InputText
-            name={"Type"}
-            defaultValue={product.type}
-            inputValue={(value) => {
-              product.type = value;
-            }}
+          <InputDropdown
+            name="Category"
+            options={categories}
+            displayKey={"name"}
+            valueKey={"_id"}
             disable={disable}
-            onError={errorMessage.type}
-          />
-          <InputText
-            name={"Category"}
-            defaultValue={product.category}
-            inputValue={(value) => {
+            defaultValue={product?.category?.name}
+            selectedValue={(value) => {
               product.category = value;
             }}
-            disable={disable}
-            onError={errorMessage.category}
+            onError={errorMessage?.category}
           />
           <InputNumber
             name={"Max Revision"}

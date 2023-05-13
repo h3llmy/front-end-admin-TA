@@ -3,22 +3,23 @@ import Table from "../components/table/table";
 import { fetchApi } from "../../utils/fetch";
 import SearchForm from "../components/form/searchForm";
 import Pagination from "../components/pagination/pagination";
-import ProductForm from "../components/form/productForm";
-import errorHanddler from "../../utils/errorHanddler";
 import { getLoginCookie } from "../../utils/cookie";
+import errorHanddler from "../../utils/errorHanddler";
 import ModalButton from "../components/button/modalButton";
+import { dateConvert } from "../../utils/dateConvert";
+import CategoryForm from "../components/form/categpryForm";
 
-export default function Product() {
-  const [productsList, setProductsList] = useState({});
+export default function Category() {
+  const [categorysList, setCategoryList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const fetchProducts = async () => {
+  const fetchCategorys = async () => {
     try {
-      const [products] = await Promise.all([
+      const [categorys] = await Promise.all([
         fetchApi.get(
-          `/product/list?page=${currentPage}&limit=10${
+          `/categories/list?page=${currentPage}&limit=10${
             searchText && `&search=${searchText}`
           }`,
           {
@@ -28,10 +29,11 @@ export default function Product() {
           }
         ),
       ]);
-      products.data.data.list.map((product) => {
-        product.category = product.category.name;
+      categorys.data.data.list.map((category) => {
+        category.createdAt = dateConvert(category.createdAt);
+        category.sold = String(category?.sold);
       });
-      setProductsList(products.data.data);
+      setCategoryList(categorys.data.data);
       setErrorMessage("");
     } catch (error) {
       errorHanddler(error, setErrorMessage);
@@ -39,7 +41,7 @@ export default function Product() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchCategorys();
   }, [currentPage, searchText, errorMessage]);
 
   return (
@@ -53,16 +55,16 @@ export default function Product() {
 
       <div className="flex justify-end py-3">
         <ModalButton
-          title={"Create Product"}
-          label={"Create Product"}
+          title={"Create Category"}
+          label={"Create Category"}
           color={"bg-blue-600 hover:bg-blue-700"}
           content={(setModalContent, setModals) => {
             setModalContent(
-              <ProductForm
+              <CategoryForm
                 label={"Create"}
                 color={"bg-blue-600 hover:bg-blue-700"}
                 setModal={(value) => {
-                  fetchProducts();
+                  fetchCategorys();
                   setCurrentPage(1);
                   setModals(value);
                 }}
@@ -73,25 +75,25 @@ export default function Product() {
       </div>
 
       <Table
-        headers={["name", "category", "price", "maxRevision"]}
-        data={productsList?.list}
+        headers={["name", "createdAt", "sold"]}
+        data={categorysList?.list}
         errorMessage={errorMessage}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Product");
             modalContent(
-              <ProductForm id={id} disable={true} setModal={setModal} />
+              <CategoryForm id={id} disable={true} setModal={setModal} />
             );
           },
           edit: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Product");
             modalContent(
-              <ProductForm
+              <CategoryForm
                 id={id}
                 label={"Update"}
                 color={"bg-blue-600 hover:bg-blue-700"}
                 setModal={(event) => {
-                  fetchProducts();
+                  fetchCategorys();
                   setModal(event);
                 }}
               />
@@ -100,13 +102,13 @@ export default function Product() {
           delete: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Delete Product");
             modalContent(
-              <ProductForm
+              <CategoryForm
                 id={id}
                 disable={true}
                 label={"Delete"}
                 color={"bg-[#DC2626] hover:bg-[#B91C1C]"}
                 setModal={(event) => {
-                  fetchProducts();
+                  fetchCategorys();
                   setModal(event);
                 }}
               />
@@ -116,8 +118,8 @@ export default function Product() {
       />
 
       <div className="flex flex-row-reverse pt-6">
-        {productsList?.list && (
-          <Pagination data={productsList} onPageChange={setCurrentPage} />
+        {categorysList?.list && (
+          <Pagination data={categorysList} onPageChange={setCurrentPage} />
         )}
       </div>
     </>

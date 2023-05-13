@@ -7,7 +7,7 @@ export default function SidebarButton({ href, svg, name, notif, onClick }) {
     <Link href={href}>
       <a
         onClick={onClick}
-        className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+        className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-white dark:hover:bg-gray-700 ${
           router.pathname === href ? "bg-white dark:bg-gray-700" : ""
         }`}
       >

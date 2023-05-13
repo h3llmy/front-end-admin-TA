@@ -40,6 +40,9 @@ export default function BarChart({ labels, data, title }) {
         display: true,
         text: title,
       },
+      legend: {
+        display: false,
+      },
     },
     aspectRatio: 2.5,
   };

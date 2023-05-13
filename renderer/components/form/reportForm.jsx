@@ -8,6 +8,7 @@ import { getLoginCookie } from "../../../utils/cookie";
 export default function ReportForm({ label, color, setModal }) {
   const [from, setFrom] = useState("");
   const [until, setUntil] = useState("");
+  const [currentDate] = useState(new Date());
   const [errorMessage, setErrorMessage] = useState({});
 
   const handleSubmit = async (event) => {
@@ -55,7 +56,7 @@ export default function ReportForm({ label, color, setModal }) {
         <InputDate
           name={"Until"}
           inputValue={setUntil}
-          defaultValue={new Date().toDateString()}
+          defaultValue={currentDate}
           disable={false}
           onError={errorMessage?.until}
         />

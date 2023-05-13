@@ -12,11 +12,10 @@ export default function Modal({ onDecline, title, content }) {
   return (
     <div
       ref={modalRef}
-      id="staticModal"
       data-modal-backdrop="static"
       tabIndex="-1"
       aria-hidden="true"
-      className="w-full h-full fixed top-0 left-0 right-0 z-50 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+      className="w-full h-full fixed top-0 left-0 right-0 z-50 bg-gray-900 bg-opacity-70 flex justify-center items-center"
       onClick={handleBackdropClick}
     >
       <div className="relative w-full max-w-4xl max-h-full">

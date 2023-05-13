@@ -79,15 +79,6 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
             disable={true}
             onError={errorMessage.productCategory}
           />
-          <InputText
-            name={"Product Type"}
-            defaultValue={order?.productType}
-            inputValue={(value) => {
-              order.productType = value;
-            }}
-            disable={true}
-            onError={errorMessage.productType}
-          />
           <InputNumber
             name={"Price"}
             defaultValue={order?.price}
