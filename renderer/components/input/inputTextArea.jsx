@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 
-export default function InputTextArea({
+const InputTextArea = ({
   name,
   defaultValue,
   inputValue,
   onError,
   autoFocus,
   disable,
-}) {
+}) => {
   useEffect(() => {
     if (defaultValue) {
       inputValue(defaultValue);
@@ -46,4 +46,6 @@ export default function InputTextArea({
       )}
     </>
   );
-}
+};
+
+export default InputTextArea;

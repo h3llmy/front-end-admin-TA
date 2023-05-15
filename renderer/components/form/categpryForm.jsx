@@ -7,7 +7,7 @@ import errorHanddler from "../../../utils/errorHanddler";
 import InputNumber from "../input/inputNumber";
 import InputDate from "../input/inputDate";
 
-export default function CategoryForm({ id, setModal, disable, label, color }) {
+const CategoryForm = ({ id, setModal, disable, label, color }) => {
   const [categories, setCategories] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
 
@@ -115,4 +115,6 @@ export default function CategoryForm({ id, setModal, disable, label, color }) {
       </form>
     </>
   );
-}
+};
+
+export default CategoryForm;

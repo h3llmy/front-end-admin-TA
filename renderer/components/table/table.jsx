@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from "../modal/modal";
 import LoadingAnimation from "../loading/loadingAnimation";
 
-function Table({ headers, data, actions, errorMessage, stringLength }) {
+const Table = ({ headers, data, actions, errorMessage, stringLength }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [modalTitle, setModalTitle] = useState("");
@@ -116,6 +116,6 @@ function Table({ headers, data, actions, errorMessage, stringLength }) {
       )}
     </>
   );
-}
+};
 
 export default Table;

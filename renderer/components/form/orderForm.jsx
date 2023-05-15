@@ -8,7 +8,7 @@ import InputDate from "../input/inputDate";
 import { getLoginCookie } from "../../../utils/cookie";
 import errorHanddler from "../../../utils/errorHanddler";
 
-export default function OrderForm({ id, setModal, disable, label, color }) {
+const OrderForm = ({ id, setModal, disable, label, color }) => {
   const [order, setOrder] = useState({});
   const [orderStatus, setOrderStatus] = useState("");
   const [errorMessage, setErrorMessage] = useState({});
@@ -154,4 +154,5 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
       </form>
     </>
   );
-}
+};
+export default OrderForm;

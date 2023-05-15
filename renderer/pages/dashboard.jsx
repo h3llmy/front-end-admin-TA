@@ -6,7 +6,7 @@ import { getLoginCookie } from "../../utils/cookie.js";
 import DoughnutChart from "../components/chart/doughnutChart.jsx";
 import Counter from "../components/card/counter.jsx";
 
-export default function Dashboard() {
+const Dashboard = () => {
   const [incomePerMonth, setIncomePerMonth] = useState();
   const [incomePerYear, setIncomePerYear] = useState();
   const [categorys, setCategory] = useState({});
@@ -109,9 +109,11 @@ export default function Dashboard() {
         <DoughnutChart
           title={"penjualan per category"}
           labels={categorys?.list?.map((category) => category.name)}
-          data={categorys?.list?.map((category) => category.sold || 100)}
+          data={categorys?.list?.map((category) => category.sold)}
         />
       </div>
     </>
   );
-}
+};
+
+export default Dashboard;

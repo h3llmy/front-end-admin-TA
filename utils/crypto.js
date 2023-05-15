@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import config from "../main/appConfig";
 
-export function encryptString(str) {
+export const encryptString = (str) => {
   const algorithm = "AES-256-CBC";
   const key = crypto.scryptSync(config.COOKIE_PASSWORD, "salt", 32);
   const iv = crypto.randomBytes(16);
@@ -9,9 +9,9 @@ export function encryptString(str) {
   let encrypted = cipher.update(str, "utf8", "hex");
   encrypted += cipher.final("hex");
   return iv.toString("hex") + ":" + encrypted;
-}
+};
 
-export function decryptString(str) {
+export const decryptString = (str) => {
   const algorithm = "AES-256-CBC";
   const key = crypto.scryptSync(config.COOKIE_PASSWORD, "salt", 32);
   const parts = str.split(":");
@@ -20,4 +20,4 @@ export function decryptString(str) {
   let decrypted = decipher.update(parts.join(":"), "hex", "utf8");
   decrypted += decipher.final("utf8");
   return decrypted;
-}
+};

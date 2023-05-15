@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 
-export default function Modal({ onDecline, title, content }) {
+const Modal = ({ onDecline, title, content }) => {
   const modalRef = useRef(null);
 
   const handleBackdropClick = (event) => {
@@ -52,4 +52,6 @@ export default function Modal({ onDecline, title, content }) {
       </div>
     </div>
   );
-}
+};
+
+export default Modal;

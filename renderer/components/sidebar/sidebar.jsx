@@ -1,7 +1,7 @@
 import SidebarButton from "../button/sidebarButton";
 import { deleteCookie } from "../../../utils/cookie";
 
-export default function Sidebar() {
+const Sidebar = () => {
   return (
     <>
       <aside
@@ -168,4 +168,6 @@ export default function Sidebar() {
       </aside>
     </>
   );
-}
+};
+
+export default Sidebar;

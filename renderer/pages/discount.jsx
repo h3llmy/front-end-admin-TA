@@ -8,7 +8,7 @@ import DiscountForm from "../components/form/discountForm";
 import errorHanddler from "../../utils/errorHanddler";
 import ModalButton from "../components/button/modalButton";
 
-export default function Discount() {
+const Discount = () => {
   const [discountsList, setDiscountsList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
@@ -126,4 +126,6 @@ export default function Discount() {
       </div>
     </>
   );
-}
+};
+
+export default Discount;

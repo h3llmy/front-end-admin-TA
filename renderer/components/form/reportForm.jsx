@@ -5,7 +5,7 @@ import { fetchApi } from "../../../utils/fetch";
 import errorHanddler from "../../../utils/errorHanddler";
 import { getLoginCookie } from "../../../utils/cookie";
 
-export default function ReportForm({ label, color, setModal }) {
+const ReportForm = ({ label, color, setModal }) => {
   const [from, setFrom] = useState("");
   const [until, setUntil] = useState("");
   const [currentDate] = useState(new Date());
@@ -70,4 +70,6 @@ export default function ReportForm({ label, color, setModal }) {
       />
     </form>
   );
-}
+};
+
+export default ReportForm;

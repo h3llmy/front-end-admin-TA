@@ -8,7 +8,7 @@ import InputDate from "../input/inputDate";
 import InputDropdown from "../input/inputDropdown";
 import errorHanddler from "../../../utils/errorHanddler";
 
-export default function DiscountForm({ id, setModal, disable, label, color }) {
+const DiscountForm = ({ id, setModal, disable, label, color }) => {
   const [discount, setDiscount] = useState({});
   const [product, setProduct] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
@@ -152,4 +152,6 @@ export default function DiscountForm({ id, setModal, disable, label, color }) {
       </form>
     </>
   );
-}
+};
+
+export default DiscountForm;

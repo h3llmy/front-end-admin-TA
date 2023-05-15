@@ -10,7 +10,7 @@ import {
 import { Line } from "react-chartjs-2";
 import LoadingAnimation from "../loading/loadingAnimation";
 
-export default function LineChart({ labels, data, title }) {
+const LineChart = ({ labels, data, title }) => {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -57,4 +57,6 @@ export default function LineChart({ labels, data, title }) {
       )}
     </>
   );
-}
+};
+
+export default LineChart;

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-export default function SidebarButton({ href, svg, name, notif, onClick }) {
+const SidebarButton = ({ href, svg, name, notif, onClick }) => {
   const router = useRouter();
   return (
     <Link href={href}>
@@ -21,4 +21,6 @@ export default function SidebarButton({ href, svg, name, notif, onClick }) {
       </a>
     </Link>
   );
-}
+};
+
+export default SidebarButton;

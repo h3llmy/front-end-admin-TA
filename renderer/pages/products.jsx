@@ -8,7 +8,7 @@ import errorHanddler from "../../utils/errorHanddler";
 import { getLoginCookie } from "../../utils/cookie";
 import ModalButton from "../components/button/modalButton";
 
-export default function Product() {
+const Product = () => {
   const [productsList, setProductsList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
@@ -122,4 +122,6 @@ export default function Product() {
       </div>
     </>
   );
-}
+};
+
+export default Product;

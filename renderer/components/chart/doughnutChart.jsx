@@ -3,7 +3,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import LoadingAnimation from "../loading/loadingAnimation";
 
-export default function DoughnutChart({ title, labels, data }) {
+const DoughnutChart = ({ title, labels, data }) => {
   ChartJS.register(ArcElement, Tooltip, Legend);
 
   const options = {
@@ -60,4 +60,6 @@ export default function DoughnutChart({ title, labels, data }) {
       )}
     </>
   );
-}
+};
+
+export default DoughnutChart;

@@ -3,14 +3,14 @@ import ProgressBar from "../loading/progressBar";
 import axios from "axios";
 import JSZip from "jszip";
 
-export default function InputMultipleFiles({
+const InputMultipleFiles = ({
   disable,
   name,
   inputValue,
   defaultValue,
   process,
   downloadAble,
-}) {
+}) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -274,4 +274,6 @@ export default function InputMultipleFiles({
       </div>
     </>
   );
-}
+};
+
+export default InputMultipleFiles;

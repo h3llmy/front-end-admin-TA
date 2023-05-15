@@ -8,7 +8,7 @@ import { dateConvert } from "../../utils/dateConvert";
 import errorHanddler from "../../utils/errorHanddler";
 import UserForm from "../components/form/userForm";
 
-export default function Users() {
+const Users = () => {
   const [usersList, setUsersList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
@@ -110,4 +110,6 @@ export default function Users() {
       </div>
     </>
   );
-}
+};
+
+export default Users;

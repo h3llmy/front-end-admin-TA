@@ -8,7 +8,7 @@ import InputDate from "../input/inputDate";
 import Table from "../table/table";
 import { dateConvert } from "../../../utils/dateConvert";
 
-export default function UserForm({ id, setModal, disable, label, color }) {
+const UserForm = ({ id, setModal, disable, label, color }) => {
   const [user, setUser] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
 
@@ -138,4 +138,6 @@ export default function UserForm({ id, setModal, disable, label, color }) {
       </form>
     </>
   );
-}
+};
+
+export default UserForm;

@@ -1,6 +1,6 @@
 import LoadingAnimation from "../loading/loadingAnimation";
 
-export default function Counter({ label, data }) {
+const Counter = ({ label, data }) => {
   return (
     <>
       <div className="bg-gray-100 dark:bg-gray-800 rounded-md p-4 shadow-md">
@@ -19,4 +19,6 @@ export default function Counter({ label, data }) {
       </div>
     </>
   );
-}
+};
+
+export default Counter;

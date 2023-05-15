@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function Pagination({ data, onPageChange }) {
+const Pagination = ({ data, onPageChange }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = data?.totalPages;
 
@@ -83,4 +83,6 @@ export default function Pagination({ data, onPageChange }) {
       </ul>
     </nav>
   );
-}
+};
+
+export default Pagination;

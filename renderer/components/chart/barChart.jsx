@@ -10,7 +10,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import LoadingAnimation from "../loading/loadingAnimation";
 
-export default function BarChart({ labels, data, title }) {
+const BarChart = ({ labels, data, title }) => {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -58,4 +58,6 @@ export default function BarChart({ labels, data, title }) {
       )}
     </>
   );
-}
+};
+
+export default BarChart;

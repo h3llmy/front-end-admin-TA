@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 
-export default function InputDate({
+const InputDate = ({
   name,
   defaultValue,
   inputValue,
   onError,
   autoFocus,
   disable,
-}) {
+}) => {
   useEffect(() => {
     if (defaultValue) {
       inputValue(defaultValue);
@@ -44,4 +44,6 @@ export default function InputDate({
       )}
     </div>
   );
-}
+};
+
+export default InputDate;

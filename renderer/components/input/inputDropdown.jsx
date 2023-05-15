@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function InputDropdown({
+const InputDropdown = ({
   name,
   options,
   defaultValue,
@@ -9,7 +9,7 @@ export default function InputDropdown({
   valueKey,
   disable,
   onError,
-}) {
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [isValidOption, setIsValidOption] = useState(true);
@@ -143,4 +143,6 @@ export default function InputDropdown({
       )}
     </div>
   );
-}
+};
+
+export default InputDropdown;

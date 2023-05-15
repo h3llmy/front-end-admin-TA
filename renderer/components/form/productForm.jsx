@@ -9,7 +9,7 @@ import InputMultipleFiles from "../input/inputMultipleFiles";
 import errorHanddler from "../../../utils/errorHanddler";
 import InputDropdown from "../input/inputDropdown";
 
-export default function ProductForm({ id, setModal, disable, label, color }) {
+const ProductForm = ({ id, setModal, disable, label, color }) => {
   const [product, setProduct] = useState({});
   const [categories, setCategories] = useState({});
   const [productImages, setProductImages] = useState({});
@@ -199,4 +199,6 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
       </form>
     </>
   );
-}
+};
+
+export default ProductForm;

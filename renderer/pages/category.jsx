@@ -9,7 +9,7 @@ import ModalButton from "../components/button/modalButton";
 import { dateConvert } from "../../utils/dateConvert";
 import CategoryForm from "../components/form/categpryForm";
 
-export default function Category() {
+const Category = () => {
   const [categorysList, setCategoryList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
@@ -124,4 +124,6 @@ export default function Category() {
       </div>
     </>
   );
-}
+};
+
+export default Category;
