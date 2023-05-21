@@ -1,5 +1,4 @@
 import { useState } from "react";
-import ProgressBar from "../components/loading/progressBar";
 
 export default function Test() {
   const [selectedValue, setSelectedValue] = useState("");

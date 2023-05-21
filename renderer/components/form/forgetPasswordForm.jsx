@@ -19,6 +19,7 @@ const ForgetPasswordForm = () => {
         email: email,
         url: appConfig.WEB_URL,
       });
+      console.log(appConfig.WEB_URL);
       alert("check your email");
       setErrorMessage("");
       router.push("/login");
@@ -29,6 +30,9 @@ const ForgetPasswordForm = () => {
   };
   return (
     <form onSubmit={handdleSubmit}>
+      <h1 className="text-4xl text-center mb-8 font-semibold">
+        Forget Pssword
+      </h1>
       <InputText
         name={"Email"}
         inputValue={(value) => {

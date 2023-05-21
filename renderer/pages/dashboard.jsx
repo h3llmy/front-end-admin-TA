@@ -83,31 +83,24 @@ const Dashboard = () => {
       <div className="grid grid-cols-2 gap-4">
         <div className="w-full h-64 bg-gray-100 dark:bg-gray-800 rounded-lg p-3 shadow-md">
           <BarChart
-            title={`Data Penjualan Bulanan ${new Date().getFullYear()}`}
+            title={`monthly sales ${new Date().getFullYear()}`}
             labels={incomePerMonth?.map((product) => product.month)}
             data={incomePerMonth?.map((product) => product.totalIncome)}
           />
         </div>
         <div className="w-full h-64 bg-gray-100 dark:bg-gray-800 rounded-lg p-3 shadow-md">
           <LineChart
-            title={`Data Penjualan ${
+            title={`sales data for ${
               new Date().getFullYear() - 10
             } - ${new Date().getFullYear()}`}
             labels={incomePerYear?.map((product) => product.year)}
             data={incomePerYear?.map((product) => product.totalIncome)}
           />
         </div>
-        {/* <div className="w-full h-64 bg-gray-100 dark:bg-gray-800 rounded-lg p-3 shadow-md">
-          <PieChart
-            title={"penjualan per category"}
-            labels={categorys?.list?.map((category) => category.name)}
-            data={categorys?.list?.map((category) => category.sold || 100)}
-          />
-        </div> */}
       </div>
       <div className="w-full mt-4 h-80 bg-gray-100 dark:bg-gray-800 rounded-lg p-3 shadow-md">
         <DoughnutChart
-          title={"penjualan per category"}
+          title={"sales per category"}
           labels={categorys?.list?.map((category) => category.name)}
           data={categorys?.list?.map((category) => category.sold)}
         />

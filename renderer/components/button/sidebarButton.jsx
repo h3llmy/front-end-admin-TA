@@ -12,7 +12,7 @@ const SidebarButton = ({ href, svg, name, notif, onClick }) => {
         }`}
       >
         {svg}
-        <span className="flex-1 ml-3 whitespace-nowrap">{name}</span>
+        <p className="flex-1 ml-3 text-[rgb(136 19 55)]">{name}</p>
         {notif ? (
           <span className="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
             {notif}

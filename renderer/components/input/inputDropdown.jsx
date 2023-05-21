@@ -128,7 +128,7 @@ const InputDropdown = ({
                 key={option[valueKey]}
                 className="
                   cursor-pointer py-1.5 px-2.5 hover:bg-gray-200 dark:hover:bg-gray-700
-                  whitespace-nowrap
+                  whitespace-nowrap w-full h-full
                 "
                 onClick={() => handleOptionClick(option)}
               >
