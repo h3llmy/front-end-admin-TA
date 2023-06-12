@@ -13,13 +13,11 @@ const CategoryForm = ({ id, setModal, disable, label, color }) => {
 
   const getCategoriesDetail = async () => {
     try {
-      const [dataCategories] = await Promise.all([
-        fetchApi.get(`/categories/detail/${id}`, {
-          headers: {
-            Authorization: `Bearer ${await getLoginCookie("user")}`,
-          },
-        }),
-      ]);
+      const dataCategories = await fetchApi.get(`/categories/detail/${id}`, {
+        headers: {
+          Authorization: `Bearer ${await getLoginCookie("user")}`,
+        },
+      });
       const { data } = dataCategories.data;
       setCategories(data);
     } catch (error) {

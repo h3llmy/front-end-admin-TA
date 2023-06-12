@@ -28,9 +28,7 @@ const ProductForm = ({ id, setModal, disable, label, color }) => {
 
   const getProductDetail = async () => {
     try {
-      const [dataProduct] = await Promise.all([
-        fetchApi.get(`/product/detail/${id}`),
-      ]);
+      const dataProduct = await fetchApi.get(`/product/detail/${id}`);
       const { data } = dataProduct.data;
       setProduct(data);
     } catch (error) {

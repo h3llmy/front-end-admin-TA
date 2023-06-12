@@ -14,13 +14,11 @@ const UserForm = ({ id, setModal, disable, label, color }) => {
 
   const getUserDetail = async () => {
     try {
-      const [dataUser] = await Promise.all([
-        fetchApi.get(`/user/detail?userId=${id}`, {
-          headers: {
-            Authorization: `Bearer ${await getLoginCookie("user")}`,
-          },
-        }),
-      ]);
+      const dataUser = await fetchApi.get(`/user/detail?userId=${id}`, {
+        headers: {
+          Authorization: `Bearer ${await getLoginCookie("user")}`,
+        },
+      });
       const { data } = dataUser.data;
       data.collections.forEach((collection) => {
         collection.createdAt = dateConvert(collection.createdAt);

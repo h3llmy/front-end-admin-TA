@@ -11,23 +11,23 @@ import UserForm from "../components/form/userForm";
 const Users = () => {
   const [usersList, setUsersList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const fetchUsers = async () => {
     try {
-      const [users] = await Promise.all([
-        fetchApi.get(
-          `/user/list?page=${currentPage}&limit=10${
-            searchText && `&search=${searchText}`
-          }`,
-          {
-            headers: {
-              Authorization: `Bearer ${await getLoginCookie("user")}`,
-            },
-          }
-        ),
-      ]);
+      setIsLoading();
+      const users = await fetchApi.get(
+        `/user/list?page=${currentPage}&limit=10${
+          searchText && `&search=${searchText}`
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${await getLoginCookie("user")}`,
+          },
+        }
+      );
       users.data.data.list.forEach((user) => {
         user.status = user.isActive ? "Active" : "Not Active";
         delete user.isActive;
@@ -37,6 +37,8 @@ const Users = () => {
       setErrorMessage("");
     } catch (error) {
       errorHanddler(error, setErrorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -59,6 +61,7 @@ const Users = () => {
         headers={["username", "email", "createdAt", "status"]}
         data={usersList?.list}
         errorMessage={errorMessage}
+        isLoading={isLoading}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Product");

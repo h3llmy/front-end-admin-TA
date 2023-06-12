@@ -15,13 +15,11 @@ const DiscountForm = ({ id, setModal, disable, label, color }) => {
 
   const getDiscountDetail = async () => {
     try {
-      const [dataDiscount] = await Promise.all([
-        fetchApi.get(`/discount/detail/${id}`, {
-          headers: {
-            Authorization: `Bearer ${await getLoginCookie("user")}`,
-          },
-        }),
-      ]);
+      const dataDiscount = await fetchApi.get(`/discount/detail/${id}`, {
+        headers: {
+          Authorization: `Bearer ${await getLoginCookie("user")}`,
+        },
+      });
       const { data } = dataDiscount.data;
       setDiscount(data);
     } catch (error) {

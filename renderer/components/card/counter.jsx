@@ -1,6 +1,9 @@
 import LoadingAnimation from "../loading/loadingAnimation";
 
 const Counter = ({ label, data }) => {
+  if (!data) {
+    data = String(0);
+  }
   return (
     <>
       <div className="bg-gray-100 dark:bg-gray-800 rounded-md p-4 shadow-md">

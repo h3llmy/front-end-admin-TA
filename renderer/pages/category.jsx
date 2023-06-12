@@ -17,18 +17,16 @@ const Category = () => {
 
   const fetchCategorys = async () => {
     try {
-      const [categorys] = await Promise.all([
-        fetchApi.get(
-          `/categories/list?page=${currentPage}&limit=10${
-            searchText && `&search=${searchText}`
-          }`,
-          {
-            headers: {
-              Authorization: `Bearer ${await getLoginCookie("user")}`,
-            },
-          }
-        ),
-      ]);
+      const categorys = await fetchApi.get(
+        `/categories/list?page=${currentPage}&limit=10${
+          searchText && `&search=${searchText}`
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${await getLoginCookie("user")}`,
+          },
+        }
+      );
       categorys.data.data.list.map((category) => {
         category.createdAt = dateConvert(category.createdAt);
         category.sold = String(category?.sold);

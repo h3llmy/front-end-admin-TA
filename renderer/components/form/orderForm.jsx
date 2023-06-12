@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchApi } from "../../../utils/fetch";
 import ModalFormButton from "../button/modalFormButton";
 import InputText from "../input/inputText";
@@ -15,13 +15,11 @@ const OrderForm = ({ id, setModal, disable, label, color }) => {
 
   const getOrderDetail = async () => {
     try {
-      const [dataOrder] = await Promise.all([
-        fetchApi.get(`/order/detail/${id}`, {
-          headers: {
-            Authorization: `Bearer ${await getLoginCookie("user")}`,
-          },
-        }),
-      ]);
+      const dataOrder = await fetchApi.get(`/order/detail/${id}`, {
+        headers: {
+          Authorization: `Bearer ${await getLoginCookie("user")}`,
+        },
+      });
       const { data } = dataOrder.data;
       setOrder(data);
     } catch (error) {

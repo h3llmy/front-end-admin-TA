@@ -8,7 +8,9 @@ const SidebarButton = ({ href, svg, name, notif, onClick }) => {
       <a
         onClick={onClick}
         className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-white dark:hover:bg-gray-700 ${
-          router.pathname === href ? "bg-white dark:bg-gray-700" : ""
+          router.pathname === href
+            ? "bg-white dark:bg-gray-700 border-2 border-gray-400"
+            : ""
         }`}
       >
         {svg}

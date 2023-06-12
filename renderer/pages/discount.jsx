@@ -7,22 +7,29 @@ import { dateConvert } from "../../utils/dateConvert";
 import DiscountForm from "../components/form/discountForm";
 import errorHanddler from "../../utils/errorHanddler";
 import ModalButton from "../components/button/modalButton";
+import { getLoginCookie } from "../../utils/cookie";
 
 const Discount = () => {
   const [discountsList, setDiscountsList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const fetchDiscounts = async () => {
     try {
-      const [discount] = await Promise.all([
-        fetchApi.get(
-          `/discount/list?page=${currentPage}&limit=10${
-            searchText && `&search=${searchText}`
-          }`
-        ),
-      ]);
+      setIsLoading(true);
+      const cookie = await getLoginCookie("user");
+      const discount = await fetchApi.get(
+        `/discount/list?page=${currentPage}&limit=10${
+          searchText && `&search=${searchText}`
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookie}`,
+          },
+        }
+      );
       discount.data.data.list.forEach((discount) => {
         discount.product = discount.product.name;
         discount.percentage = `${discount.percentage}%`;
@@ -33,6 +40,8 @@ const Discount = () => {
       setErrorMessage("");
     } catch (error) {
       errorHanddler(error, setErrorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
