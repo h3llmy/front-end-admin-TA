@@ -5,6 +5,7 @@ import BarChart from "../components/chart/barChart.jsx";
 import { getLoginCookie } from "../../utils/cookie.js";
 import DoughnutChart from "../components/chart/doughnutChart.jsx";
 import Counter from "../components/card/counter.jsx";
+import errorHanddler from "../../utils/errorHanddler.js";
 
 const Dashboard = () => {
   const [incomePerMonth, setIncomePerMonth] = useState();
@@ -14,6 +15,7 @@ const Dashboard = () => {
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalCategories, setTotalCategories] = useState(0);
   const [totalUser, setTotalUser] = useState(0);
+  const [errorMessage, setErrorMessage] = useState(0);
 
   const fetching = async () => {
     try {
@@ -64,7 +66,7 @@ const Dashboard = () => {
       setTotalCategories(categories.data.data);
       setTotalUser(users.data.data);
     } catch (error) {
-      console.error(error);
+      errorHanddler(error, setErrorMessage);
     }
   };
 
@@ -84,6 +86,7 @@ const Dashboard = () => {
         <div className="w-full h-64 bg-gray-100 dark:bg-gray-800 rounded-lg p-3 shadow-md">
           <BarChart
             title={`monthly sales ${new Date().getFullYear()}`}
+            onError={errorMessage}
             labels={incomePerMonth?.map((product) => product.month)}
             data={incomePerMonth?.map((product) => product.totalIncome)}
           />
@@ -93,6 +96,7 @@ const Dashboard = () => {
             title={`sales data for ${
               new Date().getFullYear() - 10
             } - ${new Date().getFullYear()}`}
+            onError={errorMessage}
             labels={incomePerYear?.map((product) => product.year)}
             data={incomePerYear?.map((product) => product.totalIncome)}
           />
@@ -101,6 +105,7 @@ const Dashboard = () => {
       <div className="w-full mt-4 h-80 bg-gray-100 dark:bg-gray-800 rounded-lg p-3 shadow-md">
         <DoughnutChart
           title={"sales per category"}
+          onError={errorMessage}
           labels={categorys?.list?.map((category) => category.name)}
           data={categorys?.list?.map((category) => category.sold)}
         />

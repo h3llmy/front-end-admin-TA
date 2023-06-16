@@ -10,7 +10,7 @@ import {
 import { Line } from "react-chartjs-2";
 import LoadingAnimation from "../loading/loadingAnimation";
 
-const LineChart = ({ labels, data, title }) => {
+const LineChart = ({ labels, data, title, onError }) => {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -52,7 +52,13 @@ const LineChart = ({ labels, data, title }) => {
         <Line options={options} data={chartData} />
       ) : (
         <div className="h-full flex justify-center">
-          <LoadingAnimation />
+          {onError ? (
+            <div className="text-[#FF0000] font-semibold w-full h-full flex justify-center items-center">
+              {onError}
+            </div>
+          ) : (
+            <LoadingAnimation />
+          )}
         </div>
       )}
     </>

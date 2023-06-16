@@ -13,6 +13,7 @@ const Discount = () => {
   const [discountsList, setDiscountsList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -20,16 +21,17 @@ const Discount = () => {
     try {
       setIsLoading(true);
       const cookie = await getLoginCookie("user");
-      const discount = await fetchApi.get(
-        `/discount/list?page=${currentPage}&limit=10${
-          searchText && `&search=${searchText}`
-        }`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookie}`,
-          },
-        }
-      );
+      const discount = await fetchApi.get(`/discount/list`, {
+        headers: {
+          Authorization: `Bearer ${cookie}`,
+        },
+        params: {
+          page: currentPage,
+          limit: 10,
+          search: searchText,
+          isActive: isActive,
+        },
+      });
       discount.data.data.list.forEach((discount) => {
         discount.product = discount.product.name;
         discount.percentage = `${discount.percentage}%`;
@@ -47,7 +49,7 @@ const Discount = () => {
 
   useEffect(() => {
     fetchDiscounts();
-  }, [currentPage, searchText, errorMessage]);
+  }, [currentPage, searchText, errorMessage, isActive]);
 
   return (
     <>
@@ -59,6 +61,13 @@ const Discount = () => {
       />
 
       <div className="flex justify-end py-3">
+        <button
+          type="button"
+          className={`bg-blue-600 hover:bg-blue-700 px-4 py-1 text-white rounded-lg focus:outline-none focus:shadow-outline-gray mr-4`}
+          onClick={() => setIsActive(isActive ? false : true)}
+        >
+          {isActive ? "Active Discount" : "All Discount"}
+        </button>
         <ModalButton
           title={"Create Discount"}
           label={"Create Discount"}
@@ -83,6 +92,7 @@ const Discount = () => {
         headers={["name", "product", "percentage", "startAt", "expiredAt"]}
         data={discountsList?.list}
         errorMessage={errorMessage}
+        isLoading={isLoading}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Discount");

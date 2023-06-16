@@ -117,7 +117,6 @@ const UserForm = ({ id, setModal, disable, label, color }) => {
                   "productUrl",
                   "productName",
                   "productCategory",
-                  "productType",
                   "createdAt",
                 ]}
                 data={user?.collections}

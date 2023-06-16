@@ -21,6 +21,7 @@ const OrderForm = ({ id, setModal, disable, label, color }) => {
         },
       });
       const { data } = dataOrder.data;
+      data.note = data.revisionNote[0] || data.note;
       setOrder(data);
     } catch (error) {
       console.error(error);
@@ -90,7 +91,6 @@ const OrderForm = ({ id, setModal, disable, label, color }) => {
             name={"Order Status"}
             defaultValue={order?.orderStatus}
             inputValue={(value) => {
-              // order.orderStatus = value;
               setOrderStatus(value);
             }}
             disable={disable && order?.orderStatus !== "done"}
@@ -117,9 +117,7 @@ const OrderForm = ({ id, setModal, disable, label, color }) => {
           <InputDate
             name={"created At"}
             defaultValue={order?.createdAt}
-            inputValue={(value) => {
-              // order.createdAt = value;
-            }}
+            inputValue={() => {}}
             disable={true}
             onError={errorMessage?.createdAt}
           />
@@ -131,9 +129,7 @@ const OrderForm = ({ id, setModal, disable, label, color }) => {
               (order.revisionNote?.length > 0 && order.revisionNote?.pop()) ||
               order.note
             }
-            inputValue={(value) => {
-              // order.revisionNote = value;
-            }}
+            inputValue={() => {}}
             disable={true}
             onError={
               errorMessage.revisionNote ||
