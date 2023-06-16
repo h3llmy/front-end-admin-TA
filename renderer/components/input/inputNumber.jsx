@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 
-export default function InputNumber({
+const InputNumber = ({
   name,
   defaultValue,
   inputValue,
   onError,
   autoFocus,
   disable,
-}) {
+}) => {
   useEffect(() => {
     if (defaultValue) {
       inputValue(defaultValue);
@@ -50,4 +50,6 @@ export default function InputNumber({
       )}
     </div>
   );
-}
+};
+
+export default InputNumber;

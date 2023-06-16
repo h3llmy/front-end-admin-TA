@@ -9,33 +9,35 @@ import errorHanddler from "../../utils/errorHanddler";
 import ModalButton from "../components/button/modalButton";
 import ReportForm from "../components/form/reportForm";
 
-export default function Order() {
+const Order = () => {
   const [ordersList, setOrdersList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const fetchOrders = async () => {
     try {
-      const [products] = await Promise.all([
-        fetchApi.get(
-          `/order/list?page=${currentPage}&limit=10${
-            searchText && `&search=${searchText}`
-          }`,
-          {
-            headers: {
-              Authorization: `Bearer ${await getLoginCookie("user")}`,
-            },
-          }
-        ),
-      ]);
-      products.data.data.list.forEach((product) => {
-        product.customer = product.customer.username;
+      setIsLoading(true);
+      const orders = await fetchApi.get(
+        `/order/list?page=${currentPage}&limit=10${
+          searchText && `&search=${searchText}`
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${await getLoginCookie("user")}`,
+          },
+        }
+      );
+      orders.data.data.list.forEach((order) => {
+        order.customer = order.customer.username;
       });
-      setOrdersList(products.data.data);
+      setOrdersList(orders.data.data);
       setErrorMessage("");
     } catch (error) {
       errorHanddler(error, setErrorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -74,9 +76,10 @@ export default function Order() {
       </div>
 
       <Table
-        headers={["customer", "productName", "productType", "orderStatus"]}
+        headers={["customer", "productName", "orderStatus"]}
         data={ordersList?.list}
         errorMessage={errorMessage}
+        isLoading={isLoading}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Order");
@@ -114,4 +117,6 @@ export default function Order() {
       </div>
     </>
   );
-}
+};
+
+export default Order;

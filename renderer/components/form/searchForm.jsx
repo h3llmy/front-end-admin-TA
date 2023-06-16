@@ -1,4 +1,4 @@
-export default function SearchForm({ searchTextCallback }) {
+const SearchForm = ({ searchTextCallback }) => {
   return (
     <form
       className="flex items-center"
@@ -62,4 +62,6 @@ export default function SearchForm({ searchTextCallback }) {
       </button>
     </form>
   );
-}
+};
+
+export default SearchForm;

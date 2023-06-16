@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchApi } from "../../../utils/fetch";
 import ModalFormButton from "../button/modalFormButton";
 import InputText from "../input/inputText";
@@ -8,21 +8,20 @@ import InputDate from "../input/inputDate";
 import { getLoginCookie } from "../../../utils/cookie";
 import errorHanddler from "../../../utils/errorHanddler";
 
-export default function OrderForm({ id, setModal, disable, label, color }) {
+const OrderForm = ({ id, setModal, disable, label, color }) => {
   const [order, setOrder] = useState({});
   const [orderStatus, setOrderStatus] = useState("");
   const [errorMessage, setErrorMessage] = useState({});
 
   const getOrderDetail = async () => {
     try {
-      const [dataOrder] = await Promise.all([
-        fetchApi.get(`/order/detail/${id}`, {
-          headers: {
-            Authorization: `Bearer ${await getLoginCookie("user")}`,
-          },
-        }),
-      ]);
+      const dataOrder = await fetchApi.get(`/order/detail/${id}`, {
+        headers: {
+          Authorization: `Bearer ${await getLoginCookie("user")}`,
+        },
+      });
       const { data } = dataOrder.data;
+      data.note = data.revisionNote[0] || data.note;
       setOrder(data);
     } catch (error) {
       console.error(error);
@@ -79,15 +78,6 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
             disable={true}
             onError={errorMessage.productCategory}
           />
-          <InputText
-            name={"Product Type"}
-            defaultValue={order?.productType}
-            inputValue={(value) => {
-              order.productType = value;
-            }}
-            disable={true}
-            onError={errorMessage.productType}
-          />
           <InputNumber
             name={"Price"}
             defaultValue={order?.price}
@@ -101,7 +91,6 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
             name={"Order Status"}
             defaultValue={order?.orderStatus}
             inputValue={(value) => {
-              // order.orderStatus = value;
               setOrderStatus(value);
             }}
             disable={disable && order?.orderStatus !== "done"}
@@ -128,9 +117,7 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
           <InputDate
             name={"created At"}
             defaultValue={order?.createdAt}
-            inputValue={(value) => {
-              // order.createdAt = value;
-            }}
+            inputValue={() => {}}
             disable={true}
             onError={errorMessage?.createdAt}
           />
@@ -142,9 +129,7 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
               (order.revisionNote?.length > 0 && order.revisionNote?.pop()) ||
               order.note
             }
-            inputValue={(value) => {
-              // order.revisionNote = value;
-            }}
+            inputValue={() => {}}
             disable={true}
             onError={
               errorMessage.revisionNote ||
@@ -163,4 +148,5 @@ export default function OrderForm({ id, setModal, disable, label, color }) {
       </form>
     </>
   );
-}
+};
+export default OrderForm;

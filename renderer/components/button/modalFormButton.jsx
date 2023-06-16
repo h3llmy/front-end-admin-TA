@@ -1,4 +1,4 @@
-export default function ModalFormButton({ onDecline, buttonName, color }) {
+const ModalFormButton = ({ onDecline, buttonName, color }) => {
   return (
     <>
       <div className="px-6 py-4 flex justify-end space-x-4 items-center">
@@ -22,4 +22,6 @@ export default function ModalFormButton({ onDecline, buttonName, color }) {
       </div>
     </>
   );
-}
+};
+
+export default ModalFormButton;

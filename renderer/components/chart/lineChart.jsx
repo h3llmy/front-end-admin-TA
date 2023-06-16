@@ -10,7 +10,7 @@ import {
 import { Line } from "react-chartjs-2";
 import LoadingAnimation from "../loading/loadingAnimation";
 
-export default function LineChart({ labels, data, title }) {
+const LineChart = ({ labels, data, title, onError }) => {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -27,6 +27,9 @@ export default function LineChart({ labels, data, title }) {
       title: {
         display: true,
         text: title,
+      },
+      legend: {
+        display: false,
       },
     },
     aspectRatio: 2.5,
@@ -49,9 +52,17 @@ export default function LineChart({ labels, data, title }) {
         <Line options={options} data={chartData} />
       ) : (
         <div className="h-full flex justify-center">
-          <LoadingAnimation />
+          {onError ? (
+            <div className="text-[#FF0000] font-semibold w-full h-full flex justify-center items-center">
+              {onError}
+            </div>
+          ) : (
+            <LoadingAnimation />
+          )}
         </div>
       )}
     </>
   );
-}
+};
+
+export default LineChart;

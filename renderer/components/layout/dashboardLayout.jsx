@@ -4,7 +4,7 @@ import Sidebar from "../sidebar/sidebar";
 import { getLoginCookie } from "../../../utils/cookie";
 import { useRouter } from "next/router";
 
-export default function DashboardLayout({ children }) {
+const DashboardLayout = ({ children }) => {
   const router = useRouter();
   const checkCooie = async () => {
     if (!(await getLoginCookie("user"))) {
@@ -23,4 +23,6 @@ export default function DashboardLayout({ children }) {
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default DashboardLayout;

@@ -1,4 +1,4 @@
-export default function ProgressBar({ progress }) {
+const ProgressBar = ({ progress }) => {
   return (
     <>
       {progress > 0 && progress !== 100 && (
@@ -18,4 +18,6 @@ export default function ProgressBar({ progress }) {
       )}
     </>
   );
-}
+};
+
+export default ProgressBar;

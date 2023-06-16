@@ -8,20 +8,18 @@ import InputDate from "../input/inputDate";
 import InputDropdown from "../input/inputDropdown";
 import errorHanddler from "../../../utils/errorHanddler";
 
-export default function DiscountForm({ id, setModal, disable, label, color }) {
+const DiscountForm = ({ id, setModal, disable, label, color }) => {
   const [discount, setDiscount] = useState({});
   const [product, setProduct] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
 
   const getDiscountDetail = async () => {
     try {
-      const [dataDiscount] = await Promise.all([
-        fetchApi.get(`/discount/detail/${id}`, {
-          headers: {
-            Authorization: `Bearer ${await getLoginCookie("user")}`,
-          },
-        }),
-      ]);
+      const dataDiscount = await fetchApi.get(`/discount/detail/${id}`, {
+        headers: {
+          Authorization: `Bearer ${await getLoginCookie("user")}`,
+        },
+      });
       const { data } = dataDiscount.data;
       setDiscount(data);
     } catch (error) {
@@ -31,7 +29,7 @@ export default function DiscountForm({ id, setModal, disable, label, color }) {
 
   const getProductLists = async () => {
     try {
-      const [dataProduct] = await Promise.all([fetchApi.get("/product/list")]);
+      const dataProduct = await fetchApi.get("/product/list");
       setProduct(dataProduct.data.data.list);
     } catch (error) {
       setErrorMessage({ ...errorMessage, product: error });
@@ -152,4 +150,6 @@ export default function DiscountForm({ id, setModal, disable, label, color }) {
       </form>
     </>
   );
-}
+};
+
+export default DiscountForm;

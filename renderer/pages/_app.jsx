@@ -4,7 +4,7 @@ import Head from "next/head";
 import "../styles/globals.css";
 import DashboardLayout from "../components/layout/dashboardLayout";
 
-export default function MyApp({ Component, pageProps }) {
+const MyApp = ({ Component, pageProps }) => {
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
     if (storedTheme === "dark") {
@@ -34,4 +34,6 @@ export default function MyApp({ Component, pageProps }) {
       {LayoutComponent}
     </>
   );
-}
+};
+
+export default MyApp;

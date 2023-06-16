@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import errorHanddler from "../../../utils/errorHanddler";
 
-export default function LoginForm() {
+const LoginForm = () => {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -66,7 +66,7 @@ export default function LoginForm() {
       <div className="flex justify-between">
         <Link href={"/forget-password"}>
           <a className="font-normal text-base px-5 py-2.5 mr-2 mb-2">
-            <u>forget your password?</u>
+            <u className="text-blue-500">forget your password?</u>
           </a>
         </Link>
         <button
@@ -78,4 +78,6 @@ export default function LoginForm() {
       </div>
     </form>
   );
-}
+};
+
+export default LoginForm;

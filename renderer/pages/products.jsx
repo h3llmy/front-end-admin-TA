@@ -8,30 +8,36 @@ import errorHanddler from "../../utils/errorHanddler";
 import { getLoginCookie } from "../../utils/cookie";
 import ModalButton from "../components/button/modalButton";
 
-export default function Product() {
+const Product = () => {
   const [productsList, setProductsList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const fetchProducts = async () => {
     try {
-      const [products] = await Promise.all([
-        fetchApi.get(
-          `/product/list?page=${currentPage}&limit=10${
-            searchText && `&search=${searchText}`
-          }`,
-          {
-            headers: {
-              Authorization: `Bearer ${await getLoginCookie("user")}`,
-            },
-          }
-        ),
-      ]);
+      setIsLoading(true);
+      const products = await fetchApi.get(
+        `/product/list?page=${currentPage}&limit=10${
+          searchText && `&search=${searchText}`
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${await getLoginCookie("user")}`,
+          },
+        }
+      );
+      products.data.data.list.map((product) => {
+        product.category = product.category.name;
+        product.maxRevision = String(product.maxRevision);
+      });
       setProductsList(products.data.data);
       setErrorMessage("");
     } catch (error) {
       errorHanddler(error, setErrorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -70,9 +76,10 @@ export default function Product() {
       </div>
 
       <Table
-        headers={["name", "category", "type", "price"]}
+        headers={["name", "category", "price", "maxRevision"]}
         data={productsList?.list}
         errorMessage={errorMessage}
+        isLoading={isLoading}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Product");
@@ -119,4 +126,6 @@ export default function Product() {
       </div>
     </>
   );
-}
+};
+
+export default Product;

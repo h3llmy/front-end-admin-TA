@@ -1,11 +1,11 @@
-export default function InputPassword({
+const InputPassword = ({
   name,
   defaultValue,
   inputValue,
   onError,
   autoFocus,
   disable,
-}) {
+}) => {
   const inputProps = {
     type: "password",
     defaultValue: defaultValue || null,
@@ -35,4 +35,6 @@ export default function InputPassword({
       )}
     </div>
   );
-}
+};
+
+export default InputPassword;

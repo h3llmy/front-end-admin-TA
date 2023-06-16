@@ -7,26 +7,38 @@ import InputTextArea from "../input/inputTextArea";
 import { getLoginCookie } from "../../../utils/cookie";
 import InputMultipleFiles from "../input/inputMultipleFiles";
 import errorHanddler from "../../../utils/errorHanddler";
+import InputDropdown from "../input/inputDropdown";
 
-export default function ProductForm({ id, setModal, disable, label, color }) {
+const ProductForm = ({ id, setModal, disable, label, color }) => {
   const [product, setProduct] = useState({});
+  const [categories, setCategories] = useState({});
   const [productImages, setProductImages] = useState({});
   const [uploadProgress, setUploadProgress] = useState(0);
   const [errorMessage, setErrorMessage] = useState({});
 
+  const getCategories = async () => {
+    try {
+      const getCategories = await fetchApi.get("/categories/list");
+      setCategories(getCategories.data.data.list);
+    } catch (error) {
+      errorHanddler(error, setErrorMessage);
+      console.error(error);
+    }
+  };
+
   const getProductDetail = async () => {
     try {
-      const [dataProduct] = await Promise.all([
-        fetchApi.get(`/product/detail/${id}`),
-      ]);
+      const dataProduct = await fetchApi.get(`/product/detail/${id}`);
       const { data } = dataProduct.data;
       setProduct(data);
     } catch (error) {
+      errorHanddler(error, setErrorMessage);
       console.error(error);
     }
   };
 
   useEffect(() => {
+    getCategories();
     if (label?.toLowerCase() !== "create") {
       getProductDetail();
     }
@@ -34,15 +46,22 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
 
   const getFormData = () => {
     const createFormData = new FormData();
-    createFormData.append("name", product.name);
-    createFormData.append("price", product.price);
-    createFormData.append("type", product.type);
-    createFormData.append("category", product.category);
-    createFormData.append("maxRevision", product.maxRevision);
-    createFormData.append("dayWork", product.dayWork);
-    createFormData.append("descryption", product.descryption);
+
+    const checkValue = (key, value) => {
+      if (value !== null && value !== undefined) {
+        createFormData.append(key, value);
+      }
+    };
+
+    checkValue("name", product.name);
+    checkValue("price", product.price);
+    checkValue("category", product.category);
+    checkValue("maxRevision", product.maxRevision);
+    checkValue("dayWork", product.dayWork);
+    checkValue("descryption", product.descryption);
+
     productImages.forEach((productImage) => {
-      createFormData.append("productFile", productImage);
+      checkValue("productFile", productImage);
     });
 
     return createFormData;
@@ -115,23 +134,17 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
             disable={disable}
             onError={errorMessage.price}
           />
-          <InputText
-            name={"Type"}
-            defaultValue={product.type}
-            inputValue={(value) => {
-              product.type = value;
-            }}
+          <InputDropdown
+            name="Category"
+            options={categories}
+            displayKey={"name"}
+            valueKey={"_id"}
             disable={disable}
-            onError={errorMessage.type}
-          />
-          <InputText
-            name={"Category"}
-            defaultValue={product.category}
-            inputValue={(value) => {
+            defaultValue={product?.category?.name}
+            selectedValue={(value) => {
               product.category = value;
             }}
-            disable={disable}
-            onError={errorMessage.category}
+            onError={errorMessage?.category}
           />
           <InputNumber
             name={"Max Revision"}
@@ -159,6 +172,7 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
             name={"Product Display"}
             disable={disable}
             process={uploadProgress}
+            downloadAble={true}
           />
         </div>
         <div className="mt-5">
@@ -183,4 +197,6 @@ export default function ProductForm({ id, setModal, disable, label, color }) {
       </form>
     </>
   );
-}
+};
+
+export default ProductForm;

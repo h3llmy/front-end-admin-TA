@@ -1,4 +1,4 @@
-export default function LoadingAnimation() {
+const LoadingAnimation = () => {
   return (
     <div className="flex items-center justify-center">
       <div className="mr-1 animate-pulse text-blue-800 dark:text-blue-200">
@@ -20,4 +20,6 @@ export default function LoadingAnimation() {
       </div>
     </div>
   );
-}
+};
+
+export default LoadingAnimation;

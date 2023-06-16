@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import ProgressBar from "../loading/progressBar";
 import axios from "axios";
+import JSZip from "jszip";
 
-export default function InputMultipleFiles({
+const InputMultipleFiles = ({
   disable,
   name,
   inputValue,
   defaultValue,
   process,
-}) {
+  downloadAble,
+}) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -37,7 +39,7 @@ export default function InputMultipleFiles({
             });
           })
         );
-        setSelectedFiles([...selectedFiles, ...files]);
+        setSelectedFiles([...files]);
         setCurrentSlide(selectedFiles.length);
       }
     } catch (error) {
@@ -55,9 +57,11 @@ export default function InputMultipleFiles({
 
   const handleFileSelect = (event) => {
     event.preventDefault();
-    const files = Array.from(event.target.files);
-    setCurrentSlide(selectedFiles.length);
-    setSelectedFiles([...selectedFiles, ...files]);
+    if (!disable) {
+      const files = Array.from(event.target.files);
+      setCurrentSlide(selectedFiles.length);
+      setSelectedFiles([...selectedFiles, ...files]);
+    }
   };
 
   const handleFileDrop = (event) => {
@@ -67,6 +71,31 @@ export default function InputMultipleFiles({
       setCurrentSlide(selectedFiles.length);
       setSelectedFiles([...selectedFiles, ...files]);
     }
+  };
+
+  const handleDownloadSelectedFile = (event) => {
+    event.preventDefault();
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(selectedFiles[currentSlide]);
+    link.download = selectedFiles[currentSlide].name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDownloadAllFile = async (event) => {
+    event.preventDefault();
+    const zip = new JSZip();
+    selectedFiles.forEach((file) => {
+      zip.file(file.name, file);
+    });
+    const content = await zip.generateAsync({ type: "blob" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(content);
+    link.download = `${name.replace(" ", "-")}-${Date.now()}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleFileRemove = (index) => {
@@ -135,7 +164,7 @@ export default function InputMultipleFiles({
             htmlFor="dropzone-file"
             className="
               flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer 
-              bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600
+              bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600
             "
           >
             {selectedFiles.length === 0 ? (
@@ -217,8 +246,9 @@ export default function InputMultipleFiles({
             />
           </label>
         </div>
+        {<ProgressBar progress={loadingProgress} />}
         <div className="flex items-center justify-center w-full">
-          {selectedFiles.length > 0 && !disable && loadingProgress <= 0 && (
+          {selectedFiles.length > 0 && !disable && (
             <button
               onClick={(event) => {
                 event.preventDefault();
@@ -228,9 +258,22 @@ export default function InputMultipleFiles({
               Remove
             </button>
           )}
+          {selectedFiles.length > 0 && disable && downloadAble && (
+            <div className="flex space-x-5">
+              <button onClick={handleDownloadSelectedFile}>
+                {selectedFiles.length > 1 ? "Download Single File" : "Download"}
+              </button>
+              {selectedFiles.length > 1 && (
+                <button onClick={handleDownloadAllFile}>
+                  Download All File
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
-      {<ProgressBar progress={loadingProgress} />}
     </>
   );
-}
+};
+
+export default InputMultipleFiles;

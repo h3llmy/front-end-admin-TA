@@ -8,19 +8,17 @@ import InputDate from "../input/inputDate";
 import Table from "../table/table";
 import { dateConvert } from "../../../utils/dateConvert";
 
-export default function UserForm({ id, setModal, disable, label, color }) {
+const UserForm = ({ id, setModal, disable, label, color }) => {
   const [user, setUser] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
 
   const getUserDetail = async () => {
     try {
-      const [dataUser] = await Promise.all([
-        fetchApi.get(`/user/detail?userId=${id}`, {
-          headers: {
-            Authorization: `Bearer ${await getLoginCookie("user")}`,
-          },
-        }),
-      ]);
+      const dataUser = await fetchApi.get(`/user/detail?userId=${id}`, {
+        headers: {
+          Authorization: `Bearer ${await getLoginCookie("user")}`,
+        },
+      });
       const { data } = dataUser.data;
       data.collections.forEach((collection) => {
         collection.createdAt = dateConvert(collection.createdAt);
@@ -119,7 +117,6 @@ export default function UserForm({ id, setModal, disable, label, color }) {
                   "productUrl",
                   "productName",
                   "productCategory",
-                  "productType",
                   "createdAt",
                 ]}
                 data={user?.collections}
@@ -138,4 +135,6 @@ export default function UserForm({ id, setModal, disable, label, color }) {
       </form>
     </>
   );
-}
+};
+
+export default UserForm;

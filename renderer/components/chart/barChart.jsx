@@ -10,7 +10,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import LoadingAnimation from "../loading/loadingAnimation";
 
-export default function BarChart({ labels, data, title }) {
+const BarChart = ({ labels, data, title, onError }) => {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -40,6 +40,9 @@ export default function BarChart({ labels, data, title }) {
         display: true,
         text: title,
       },
+      legend: {
+        display: false,
+      },
     },
     aspectRatio: 2.5,
   };
@@ -50,9 +53,17 @@ export default function BarChart({ labels, data, title }) {
         <Bar options={options} data={chartData} />
       ) : (
         <div className="h-full flex justify-center">
-          <LoadingAnimation />
+          {onError ? (
+            <div className="text-[#FF0000] font-semibold w-full h-full flex justify-center items-center">
+              {onError}
+            </div>
+          ) : (
+            <LoadingAnimation />
+          )}
         </div>
       )}
     </>
   );
-}
+};
+
+export default BarChart;

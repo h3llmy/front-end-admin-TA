@@ -4,22 +4,21 @@ import { fetchApi } from "../../utils/fetch";
 import SearchForm from "../components/form/searchForm";
 import Pagination from "../components/pagination/pagination";
 import { getLoginCookie } from "../../utils/cookie";
-import { dateConvert } from "../../utils/dateConvert";
 import errorHanddler from "../../utils/errorHanddler";
-import UserForm from "../components/form/userForm";
+import ModalButton from "../components/button/modalButton";
+import { dateConvert } from "../../utils/dateConvert";
+import CategoryForm from "../components/form/categpryForm";
 
-const Users = () => {
-  const [usersList, setUsersList] = useState({});
+const Category = () => {
+  const [categorysList, setCategoryList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const fetchUsers = async () => {
+  const fetchCategorys = async () => {
     try {
-      setIsLoading();
-      const users = await fetchApi.get(
-        `/user/list?page=${currentPage}&limit=10${
+      const categorys = await fetchApi.get(
+        `/categories/list?page=${currentPage}&limit=10${
           searchText && `&search=${searchText}`
         }`,
         {
@@ -28,76 +27,86 @@ const Users = () => {
           },
         }
       );
-      users.data.data.list.forEach((user) => {
-        user.status = user.isActive ? "Active" : "Not Active";
-        delete user.isActive;
-        user.createdAt = dateConvert(user.createdAt);
+      categorys.data.data.list.map((category) => {
+        category.createdAt = dateConvert(category.createdAt);
+        category.sold = String(category?.sold);
       });
-      setUsersList(users.data.data);
+      setCategoryList(categorys.data.data);
       setErrorMessage("");
     } catch (error) {
       errorHanddler(error, setErrorMessage);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchCategorys();
   }, [currentPage, searchText, errorMessage]);
 
   return (
     <>
-      <div className="pb-6">
-        <SearchForm
-          searchTextCallback={(search) => {
-            setCurrentPage(1);
-            setSearchText(search);
+      <SearchForm
+        searchTextCallback={(search) => {
+          setCurrentPage(1);
+          setSearchText(search);
+        }}
+      />
+
+      <div className="flex justify-end py-3">
+        <ModalButton
+          title={"Create Category"}
+          label={"Create Category"}
+          color={"bg-blue-600 hover:bg-blue-700"}
+          content={(setModalContent, setModals) => {
+            setModalContent(
+              <CategoryForm
+                label={"Create"}
+                color={"bg-blue-600 hover:bg-blue-700"}
+                setModal={(value) => {
+                  fetchCategorys();
+                  setCurrentPage(1);
+                  setModals(value);
+                }}
+              />
+            );
           }}
         />
       </div>
 
       <Table
-        headers={["username", "email", "createdAt", "status"]}
-        data={usersList?.list}
+        headers={["name", "createdAt", "sold"]}
+        data={categorysList?.list}
         errorMessage={errorMessage}
-        isLoading={isLoading}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Product");
             modalContent(
-              <UserForm id={id} disable={true} setModal={setModal} />
+              <CategoryForm id={id} disable={true} setModal={setModal} />
             );
           },
           edit: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Product");
             modalContent(
-              <UserForm
+              <CategoryForm
                 id={id}
                 label={"Update"}
                 color={"bg-blue-600 hover:bg-blue-700"}
                 setModal={(event) => {
-                  fetchUsers();
+                  fetchCategorys();
                   setModal(event);
                 }}
               />
             );
           },
-          "activate/deactivate": (
-            id,
-            modalContent,
-            setModal,
-            setModalTitle
-          ) => {
-            setModalTitle("Update Status");
+          delete: (id, modalContent, setModal, setModalTitle) => {
+            setModalTitle("Delete Product");
             modalContent(
-              <UserForm
+              <CategoryForm
                 id={id}
                 disable={true}
-                label={"Update Status"}
+                label={"Delete"}
                 color={"bg-[#DC2626] hover:bg-[#B91C1C]"}
                 setModal={(event) => {
-                  fetchUsers();
+                  fetchCategorys();
                   setModal(event);
                 }}
               />
@@ -107,12 +116,12 @@ const Users = () => {
       />
 
       <div className="flex flex-row-reverse pt-6">
-        {usersList?.list && (
-          <Pagination data={usersList} onPageChange={setCurrentPage} />
+        {categorysList?.list && (
+          <Pagination data={categorysList} onPageChange={setCurrentPage} />
         )}
       </div>
     </>
   );
 };
 
-export default Users;
+export default Category;

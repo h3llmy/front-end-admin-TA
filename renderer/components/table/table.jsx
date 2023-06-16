@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import Modal from "../modal/modal";
 import LoadingAnimation from "../loading/loadingAnimation";
 
-function Table({ headers, data, actions, errorMessage, stringLength }) {
+const Table = ({
+  headers,
+  data,
+  actions,
+  errorMessage,
+  stringLength,
+  isLoading,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [modalTitle, setModalTitle] = useState("");
@@ -48,7 +55,7 @@ function Table({ headers, data, actions, errorMessage, stringLength }) {
                   {errorMessage}
                 </td>
               </tr>
-            ) : data && data.length > 0 ? (
+            ) : data && data.length > 0 && !isLoading ? (
               data.map((row) => (
                 <tr
                   key={row._id}
@@ -116,6 +123,6 @@ function Table({ headers, data, actions, errorMessage, stringLength }) {
       )}
     </>
   );
-}
+};
 
 export default Table;
