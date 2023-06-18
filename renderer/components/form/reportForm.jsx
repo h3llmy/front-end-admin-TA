@@ -23,17 +23,21 @@ const ReportForm = ({ label, color, setModal }) => {
           },
         }
       );
-      downloadFile(report?.data?.data?.fileUrl);
+      await downloadFile(report?.data?.data?.fileUrl);
       setModal(false);
     } catch (error) {
       errorHanddler(error, setErrorMessage);
     }
   };
 
-  const downloadFile = (fileUrl) => {
+  const downloadFile = async (fileUrl) => {
     if (fileUrl) {
+      const response = await fetch(fileUrl);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.href = fileUrl;
+      link.href = url;
+      link.download = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -41,6 +45,7 @@ const ReportForm = ({ label, color, setModal }) => {
       throw new Error("failed to generate a report");
     }
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-2 gap-5">

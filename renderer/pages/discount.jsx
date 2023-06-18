@@ -98,7 +98,7 @@ const Discount = () => {
             setModalTitle("Detail Discount");
             modalContent(
               <DiscountForm
-                id={id}
+                id={id._id}
                 disable={true}
                 setModal={(event) => {
                   setModal(event);
@@ -110,7 +110,7 @@ const Discount = () => {
             setModalTitle("Update Discount");
             modalContent(
               <DiscountForm
-                id={id}
+                id={id._id}
                 label={"Update"}
                 color={"bg-blue-600 hover:bg-blue-700"}
                 setModal={(event) => {
@@ -124,7 +124,7 @@ const Discount = () => {
             setModalTitle("Delete Discount");
             modalContent(
               <DiscountForm
-                id={id}
+                id={id._id}
                 disable={true}
                 label={"Delete"}
                 color={"bg-[#DC2626] hover:bg-[#B91C1C]"}

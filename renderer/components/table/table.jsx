@@ -78,13 +78,14 @@ const Table = ({
                           key={index}
                           onClick={() =>
                             actions[action](
-                              row._id,
+                              row,
                               (modalContent) => {
                                 setShowModal(true);
                                 setModalContent(modalContent);
                               },
                               setShowModal,
-                              setModalTitle
+                              setModalTitle,
+                              (onClick) => onClick
                             )
                           }
                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"

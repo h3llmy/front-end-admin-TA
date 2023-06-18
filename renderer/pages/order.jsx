@@ -30,6 +30,7 @@ const Order = () => {
         }
       );
       orders.data.data.list.forEach((order) => {
+        order.email = order.customer.email;
         order.customer = order.customer.username;
       });
       setOrdersList(orders.data.data);
@@ -39,6 +40,12 @@ const Order = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleClick = (email) => {
+    const mailtoLink = `mailto:${email}`;
+
+    window.location.href = mailtoLink;
   };
 
   useEffect(() => {
@@ -85,7 +92,7 @@ const Order = () => {
             setModalTitle("Detail Order");
             modalContent(
               <OrderForm
-                id={id}
+                id={id._id}
                 disable={true}
                 setModal={(event) => {
                   setModal(event);
@@ -97,7 +104,7 @@ const Order = () => {
             setModalTitle("Update Order");
             modalContent(
               <OrderForm
-                id={id}
+                id={id._id}
                 label={"Update"}
                 color={"bg-blue-600 hover:bg-blue-700"}
                 setModal={(event) => {
@@ -106,6 +113,9 @@ const Order = () => {
                 }}
               />
             );
+          },
+          contact: (id, modalContent, setModal, setModalTitle, onClick) => {
+            onClick(handleClick(id.email));
           },
         }}
       />

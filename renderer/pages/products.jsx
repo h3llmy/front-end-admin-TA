@@ -84,14 +84,14 @@ const Product = () => {
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Product");
             modalContent(
-              <ProductForm id={id} disable={true} setModal={setModal} />
+              <ProductForm id={id._id} disable={true} setModal={setModal} />
             );
           },
           edit: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Product");
             modalContent(
               <ProductForm
-                id={id}
+                id={id._id}
                 label={"Update"}
                 color={"bg-blue-600 hover:bg-blue-700"}
                 setModal={(event) => {
@@ -105,7 +105,7 @@ const Product = () => {
             setModalTitle("Delete Product");
             modalContent(
               <ProductForm
-                id={id}
+                id={id._id}
                 disable={true}
                 label={"Delete"}
                 color={"bg-[#DC2626] hover:bg-[#B91C1C]"}

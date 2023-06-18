@@ -7,6 +7,7 @@ import InputTextArea from "../input/inputTextArea";
 import InputDate from "../input/inputDate";
 import { getLoginCookie } from "../../../utils/cookie";
 import errorHanddler from "../../../utils/errorHanddler";
+import InputDropdown from "../input/inputDropdown";
 
 const OrderForm = ({ id, setModal, disable, label, color }) => {
   const [order, setOrder] = useState({});
@@ -87,10 +88,23 @@ const OrderForm = ({ id, setModal, disable, label, color }) => {
             disable={true}
             onError={errorMessage.price}
           />
-          <InputText
+          <InputDropdown
             name={"Order Status"}
             defaultValue={order?.orderStatus}
-            inputValue={(value) => {
+            options={[
+              { name: "ordered" },
+              { name: "paid" },
+              { name: "progress" },
+              { name: "revision" },
+              { name: "sended" },
+              { name: "accept" },
+              { name: "done" },
+              { name: "cancelled" },
+              { name: "failed" },
+            ]}
+            displayKey={"name"}
+            valueKey={"name"}
+            selectedValue={(value) => {
               setOrderStatus(value);
             }}
             disable={disable && order?.orderStatus !== "done"}

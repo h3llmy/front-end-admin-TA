@@ -66,14 +66,14 @@ const Users = () => {
           detail: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Detail Product");
             modalContent(
-              <UserForm id={id} disable={true} setModal={setModal} />
+              <UserForm id={id._id} disable={true} setModal={setModal} />
             );
           },
           edit: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Product");
             modalContent(
               <UserForm
-                id={id}
+                id={id._id}
                 label={"Update"}
                 color={"bg-blue-600 hover:bg-blue-700"}
                 setModal={(event) => {
@@ -92,7 +92,7 @@ const Users = () => {
             setModalTitle("Update Status");
             modalContent(
               <UserForm
-                id={id}
+                id={id._id}
                 disable={true}
                 label={"Update Status"}
                 color={"bg-[#DC2626] hover:bg-[#B91C1C]"}
