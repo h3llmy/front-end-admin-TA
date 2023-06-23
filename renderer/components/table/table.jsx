@@ -73,26 +73,33 @@ const Table = ({
                   ))}
                   {actions && (
                     <td className="px-6 py-1 space-x-2">
-                      {Object.keys(actions).map((action, index) => (
-                        <button
-                          key={index}
-                          onClick={() =>
-                            actions[action](
-                              row,
-                              (modalContent) => {
-                                setShowModal(true);
-                                setModalContent(modalContent);
-                              },
-                              setShowModal,
-                              setModalTitle,
-                              (onClick) => onClick
-                            )
-                          }
-                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                        >
-                          {stringDisplay(action)}
-                        </button>
-                      ))}
+                      {Object.keys(actions).map(
+                        (action, index) =>
+                          !row[
+                            `hidden${action?.replace(/^\w/, (match) =>
+                              match.toUpperCase()
+                            )}`
+                          ] && (
+                            <button
+                              key={index}
+                              onClick={() =>
+                                actions[action](
+                                  row,
+                                  (modalContent) => {
+                                    setShowModal(true);
+                                    setModalContent(modalContent);
+                                  },
+                                  setShowModal,
+                                  setModalTitle,
+                                  (onClick) => onClick
+                                )
+                              }
+                              className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                            >
+                              {stringDisplay(action)}
+                            </button>
+                          )
+                      )}
                     </td>
                   )}
                 </tr>

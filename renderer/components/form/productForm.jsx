@@ -8,12 +8,14 @@ import { getLoginCookie } from "../../../utils/cookie";
 import InputMultipleFiles from "../input/inputMultipleFiles";
 import errorHanddler from "../../../utils/errorHanddler";
 import InputDropdown from "../input/inputDropdown";
+import LoadingAnimation from "../loading/loadingAnimation";
 
 const ProductForm = ({ id, setModal, disable, label, color }) => {
   const [product, setProduct] = useState({});
   const [categories, setCategories] = useState({});
   const [productImages, setProductImages] = useState({});
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState({});
 
   const getCategories = async () => {
@@ -28,12 +30,15 @@ const ProductForm = ({ id, setModal, disable, label, color }) => {
 
   const getProductDetail = async () => {
     try {
+      setIsLoading(true);
       const dataProduct = await fetchApi.get(`/product/detail/${id}`);
       const { data } = dataProduct.data;
       setProduct(data);
     } catch (error) {
       errorHanddler(error, setErrorMessage);
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -113,88 +118,92 @@ const ProductForm = ({ id, setModal, disable, label, color }) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-5">
-          <InputText
-            name={"Name"}
-            defaultValue={product.name}
-            inputValue={(value) => {
-              product.name = value;
-            }}
-            autoFocus
-            disable={disable}
-            onError={errorMessage.name}
-          />
-          <InputNumber
-            name={"Price"}
-            defaultValue={product.price}
-            inputValue={(value) => {
-              product.price = value;
-            }}
-            disable={disable}
-            onError={errorMessage.price}
-          />
-          <InputDropdown
-            name="Category"
-            options={categories}
-            displayKey={"name"}
-            valueKey={"_id"}
-            disable={disable}
-            defaultValue={product?.category?.name}
-            selectedValue={(value) => {
-              product.category = value;
-            }}
-            onError={errorMessage?.category}
-          />
-          <InputNumber
-            name={"Max Revision"}
-            defaultValue={product.maxRevision}
-            inputValue={(value) => {
-              product.maxRevision = value;
-            }}
-            disable={disable}
-            onError={errorMessage.maxRevision}
-          />
-          <InputNumber
-            name={"Day Work"}
-            defaultValue={product.dayWork}
-            inputValue={(value) => {
-              product.dayWork = value;
-            }}
-            disable={disable}
-            onError={errorMessage.dayWork}
-          />
-        </div>
-        <div className="mt-5">
-          <InputMultipleFiles
-            inputValue={setProductImages}
-            defaultValue={product.productUrl}
-            name={"Product Display"}
-            disable={disable}
-            process={uploadProgress}
-            downloadAble={true}
-          />
-        </div>
-        <div className="mt-5">
-          <InputTextArea
-            name={"Descryption"}
-            defaultValue={product.descryption}
-            inputValue={(value) => {
-              product.descryption = value;
-            }}
-            disable={disable}
-            onError={errorMessage.descryption}
-          />
-        </div>
+      {isLoading ? (
+        <LoadingAnimation />
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-2 gap-5">
+            <InputText
+              name={"Name"}
+              defaultValue={product.name}
+              inputValue={(value) => {
+                product.name = value;
+              }}
+              autoFocus
+              disable={disable}
+              onError={errorMessage.name}
+            />
+            <InputNumber
+              name={"Price"}
+              defaultValue={product.price}
+              inputValue={(value) => {
+                product.price = value;
+              }}
+              disable={disable}
+              onError={errorMessage.price}
+            />
+            <InputDropdown
+              name="Category"
+              options={categories}
+              displayKey={"name"}
+              valueKey={"_id"}
+              disable={disable}
+              defaultValue={product?.category?.name}
+              selectedValue={(value) => {
+                product.category = value;
+              }}
+              onError={errorMessage?.category}
+            />
+            <InputNumber
+              name={"Max Revision"}
+              defaultValue={product.maxRevision}
+              inputValue={(value) => {
+                product.maxRevision = value;
+              }}
+              disable={disable}
+              onError={errorMessage.maxRevision}
+            />
+            <InputNumber
+              name={"Day Work"}
+              defaultValue={product.dayWork}
+              inputValue={(value) => {
+                product.dayWork = value;
+              }}
+              disable={disable}
+              onError={errorMessage.dayWork}
+            />
+          </div>
+          <div className="mt-5">
+            <InputMultipleFiles
+              inputValue={setProductImages}
+              defaultValue={product.productUrl}
+              name={"Product Display"}
+              disable={disable}
+              process={uploadProgress}
+              downloadAble={true}
+            />
+          </div>
+          <div className="mt-5">
+            <InputTextArea
+              name={"Descryption"}
+              defaultValue={product.descryption}
+              inputValue={(value) => {
+                product.descryption = value;
+              }}
+              disable={disable}
+              onError={errorMessage.descryption}
+            />
+          </div>
 
-        <ModalFormButton
-          onDecline={() => {
-            setModal(false);
-          }}
-          color={color}
-          buttonName={label}
-        />
-      </form>
+          <ModalFormButton
+            onDecline={() => {
+              setModal(false);
+            }}
+            color={color}
+            buttonName={label}
+          />
+        </form>
+      )}
     </>
   );
 };

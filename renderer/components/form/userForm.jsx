@@ -7,13 +7,16 @@ import errorHanddler from "../../../utils/errorHanddler";
 import InputDate from "../input/inputDate";
 import Table from "../table/table";
 import { dateConvert } from "../../../utils/dateConvert";
+import LoadingAnimation from "../loading/loadingAnimation";
 
 const UserForm = ({ id, setModal, disable, label, color }) => {
   const [user, setUser] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState({});
 
   const getUserDetail = async () => {
     try {
+      setIsLoading(true);
       const dataUser = await fetchApi.get(`/user/detail?userId=${id}`, {
         headers: {
           Authorization: `Bearer ${await getLoginCookie("user")}`,
@@ -27,6 +30,8 @@ const UserForm = ({ id, setModal, disable, label, color }) => {
       setUser(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -65,74 +70,78 @@ const UserForm = ({ id, setModal, disable, label, color }) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-5">
-          <InputText
-            name={"Username"}
-            defaultValue={user?.username}
-            autoFocus
-            inputValue={(value) => {
-              user.username = value;
-            }}
-            disable={disable}
-            onError={errorMessage?.username}
-          />
-          <InputText
-            name={"Email"}
-            defaultValue={user?.email}
-            inputValue={(value) => {
-              user.email = value;
-            }}
-            disable={disable}
-            onError={errorMessage?.email}
-          />
-          <InputText
-            name={"Status"}
-            defaultValue={user?.isActive}
-            inputValue={(value) => {
-              user.isActive = value;
-            }}
-            disable={true}
-            onError={errorMessage?.isActive}
-          />
-          <InputDate
-            name={"Created At"}
-            defaultValue={user?.createdAt}
-            inputValue={(value) => {
-              user.createdAt = value;
-            }}
-            disable={true}
-            onError={errorMessage?.createdAt}
-          />
-        </div>
-        {user?.collections &&
-          user?.collections.length > 0 &&
-          label?.toLowerCase() !== "update status" && (
-            <div className="mt-5">
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Collections
-              </label>
-              <Table
-                headers={[
-                  "productUrl",
-                  "productName",
-                  "productCategory",
-                  "createdAt",
-                ]}
-                data={user?.collections}
-                stringLength={100}
-              />
-            </div>
-          )}
+      {isLoading ? (
+        <LoadingAnimation />
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-2 gap-5">
+            <InputText
+              name={"Username"}
+              defaultValue={user?.username}
+              autoFocus
+              inputValue={(value) => {
+                user.username = value;
+              }}
+              disable={disable}
+              onError={errorMessage?.username}
+            />
+            <InputText
+              name={"Email"}
+              defaultValue={user?.email}
+              inputValue={(value) => {
+                user.email = value;
+              }}
+              disable={disable}
+              onError={errorMessage?.email}
+            />
+            <InputText
+              name={"Status"}
+              defaultValue={user?.isActive}
+              inputValue={(value) => {
+                user.isActive = value;
+              }}
+              disable={true}
+              onError={errorMessage?.isActive}
+            />
+            <InputDate
+              name={"Created At"}
+              defaultValue={user?.createdAt}
+              inputValue={(value) => {
+                user.createdAt = value;
+              }}
+              disable={true}
+              onError={errorMessage?.createdAt}
+            />
+          </div>
+          {user?.collections &&
+            user?.collections.length > 0 &&
+            label?.toLowerCase() !== "update status" && (
+              <div className="mt-5">
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Collections
+                </label>
+                <Table
+                  headers={[
+                    "productUrl",
+                    "productName",
+                    "productCategory",
+                    "createdAt",
+                  ]}
+                  data={user?.collections}
+                  stringLength={100}
+                />
+              </div>
+            )}
 
-        <ModalFormButton
-          onDecline={() => {
-            setModal(false);
-          }}
-          color={color}
-          buttonName={label}
-        />
-      </form>
+          <ModalFormButton
+            onDecline={() => {
+              setModal(false);
+            }}
+            color={color}
+            buttonName={label}
+          />
+        </form>
+      )}
     </>
   );
 };

@@ -8,6 +8,7 @@ import OrderForm from "../components/form/orderForm";
 import errorHanddler from "../../utils/errorHanddler";
 import ModalButton from "../components/button/modalButton";
 import ReportForm from "../components/form/reportForm";
+import OrderUpdateForm from "../components/form/orderUpdateForm";
 
 const Order = () => {
   const [ordersList, setOrdersList] = useState({});
@@ -32,6 +33,12 @@ const Order = () => {
       orders.data.data.list.forEach((order) => {
         order.email = order.customer.email;
         order.customer = order.customer.username;
+        order.hiddenUpdate = [
+          "ordered",
+          "done",
+          "cancelled",
+          "failed",
+        ].includes(order.orderStatus);
       });
       setOrdersList(orders.data.data);
       setErrorMessage("");
@@ -103,12 +110,9 @@ const Order = () => {
           update: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Order");
             modalContent(
-              <OrderForm
+              <OrderUpdateForm
                 id={id._id}
-                label={"Update"}
-                color={"bg-blue-600 hover:bg-blue-700"}
                 setModal={(event) => {
-                  fetchOrders();
                   setModal(event);
                 }}
               />
