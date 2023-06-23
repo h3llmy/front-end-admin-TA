@@ -33,12 +33,12 @@ const Order = () => {
       orders.data.data.list.forEach((order) => {
         order.email = order.customer.email;
         order.customer = order.customer.username;
-        order.hiddenUpdate = [
-          "ordered",
-          "done",
-          "cancelled",
-          "failed",
-        ].includes(order.orderStatus);
+        order.hiddenUpdate = !["accept", "progress"].includes(
+          order.orderStatus
+        );
+        order.hiddenProgress = !["paid", "revision"].includes(
+          order.orderStatus
+        );
       });
       setOrdersList(orders.data.data);
       setErrorMessage("");
@@ -49,10 +49,27 @@ const Order = () => {
     }
   };
 
-  const handleClick = (email) => {
+  const handleContactClick = (email) => {
     const mailtoLink = `mailto:${email}`;
 
     window.location.href = mailtoLink;
+  };
+
+  const handleProgressClick = async (order) => {
+    try {
+      await fetchApi.put(
+        `/order/update/progress/${order._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${await getLoginCookie("user")}`,
+          },
+        }
+      );
+      fetchOrders();
+    } catch (error) {
+      alert(String(error));
+    }
   };
 
   useEffect(() => {
@@ -107,6 +124,9 @@ const Order = () => {
               />
             );
           },
+          progress: (id, modalContent, setModal, setModalTitle, onClick) => {
+            onClick(handleProgressClick(id));
+          },
           update: (id, modalContent, setModal, setModalTitle) => {
             setModalTitle("Update Order");
             modalContent(
@@ -114,12 +134,13 @@ const Order = () => {
                 id={id._id}
                 setModal={(event) => {
                   setModal(event);
+                  fetchOrders();
                 }}
               />
             );
           },
           contact: (id, modalContent, setModal, setModalTitle, onClick) => {
-            onClick(handleClick(id.email));
+            onClick(handleContactClick(id.email));
           },
         }}
       />

@@ -46,6 +46,8 @@ const DiscountForm = ({ id, setModal, disable, label, color }) => {
     getProductLists();
     if (label?.toLowerCase() !== "create") {
       getDiscountDetail();
+    } else {
+      setIsLoading(false);
     }
   }, [id]);
 

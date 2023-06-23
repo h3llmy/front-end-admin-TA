@@ -9,6 +9,7 @@ const InputSingleFile = ({
   defaultValue,
   process,
   downloadAble,
+  onError,
 }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -89,13 +90,16 @@ const InputSingleFile = ({
         {name}
       </label>
       <div className="relative w-full">
-        <div
+        <label
+          htmlFor="single-file-input"
           className="flex items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer 
               bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
-          {selectedFile ? (
+          {onError ? (
+            <div className="text-[#FF0000] font-semibold mb-2">{onError}</div>
+          ) : selectedFile ? (
             <div className="h-64 flex items-center justify-center">
               {selectedFile.type.includes("image/") ? (
                 <img
@@ -163,7 +167,7 @@ const InputSingleFile = ({
             disabled={disable}
             onChange={handleFileSelect}
           />
-        </div>
+        </label>
         {<ProgressBar progress={loadingProgress} />}
         <div className="flex items-center justify-center w-full">
           {selectedFile && downloadAble && (

@@ -46,6 +46,8 @@ const ProductForm = ({ id, setModal, disable, label, color }) => {
     getCategories();
     if (label?.toLowerCase() !== "create") {
       getProductDetail();
+    } else {
+      setIsLoading(false);
     }
   }, [id]);
 

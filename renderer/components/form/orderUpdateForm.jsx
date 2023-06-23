@@ -5,11 +5,12 @@ import errorHanddler from "../../../utils/errorHanddler";
 import { getLoginCookie } from "../../../utils/cookie";
 import LoadingAnimation from "../loading/loadingAnimation";
 import ModalFormButton from "../button/modalFormButton";
+import InputSingleFile from "../input/inputSingleFIle";
 
 const OrderUpdateForm = ({ id, setModal }) => {
   const [order, setOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [newOrderStatus, setNewOrderStatus] = useState(true);
+  const [previewFile, setPreviewFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const fetchOrders = async () => {
     try {
@@ -32,33 +33,31 @@ const OrderUpdateForm = ({ id, setModal }) => {
     fetchOrders();
   }, []);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("mantap");
+    try {
+      const cookie = await getLoginCookie("user");
+      const createFormData = new FormData();
+      createFormData.append("productPreview", previewFile);
+      await fetchApi.put(`/order/update/preview/${id}`, createFormData, {
+        headers: {
+          Authorization: `Bearer ${cookie}`,
+        },
+      });
+      setModal(false);
+    } catch (error) {
+      errorHanddler(error, setErrorMessage);
+    }
   };
 
   return isLoading ? (
     <LoadingAnimation />
   ) : (
     <form onSubmit={handleSubmit}>
-      <InputSelect
-        name={"Order Status"}
-        defaultValue={order?.orderStatus}
-        options={[
-          "ordered",
-          "paid", // can progress
-          "progress", // can revision
-          "revision", // can sended
-          "sended", // can revision or accept
-          "accept", // can done
-          "done",
-          "cancelled",
-          "failed",
-        ]}
-        inputValue={(value) => {
-          setNewOrderStatus(value);
-        }}
-        onError={errorMessage?.orderStatus}
+      <InputSingleFile
+        inputValue={setPreviewFile}
+        name={"Preview File"}
+        onError={errorMessage}
       />
       <ModalFormButton
         onDecline={() => {

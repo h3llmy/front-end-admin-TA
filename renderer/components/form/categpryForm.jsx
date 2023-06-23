@@ -33,6 +33,8 @@ const CategoryForm = ({ id, setModal, disable, label, color }) => {
   useEffect(() => {
     if (label?.toLowerCase() !== "create") {
       getCategoriesDetail();
+    } else {
+      setIsLoading(false);
     }
   }, [id]);
 
