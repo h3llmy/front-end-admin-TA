@@ -97,7 +97,7 @@ const InputSingleFile = ({
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
-          {onError ? (
+          {onError && !selectedFile ? (
             <div className="text-[#FF0000] font-semibold mb-2">{onError}</div>
           ) : selectedFile ? (
             <div className="h-64 flex items-center justify-center">

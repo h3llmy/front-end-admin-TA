@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import InputSelect from "../input/selectOption";
 import { fetchApi } from "../../../utils/fetch";
 import errorHanddler from "../../../utils/errorHanddler";
 import { getLoginCookie } from "../../../utils/cookie";
@@ -38,12 +37,22 @@ const OrderUpdateForm = ({ id, setModal }) => {
     try {
       const cookie = await getLoginCookie("user");
       const createFormData = new FormData();
-      createFormData.append("productPreview", previewFile);
-      await fetchApi.put(`/order/update/preview/${id}`, createFormData, {
-        headers: {
-          Authorization: `Bearer ${cookie}`,
-        },
-      });
+      if (!previewFile) throw new Error("file is required");
+      if (order.orderStatus === "accept") {
+        createFormData.append("proudctFile", previewFile);
+        await fetchApi.put(`/order/update/done/${id}`, createFormData, {
+          headers: {
+            Authorization: `Bearer ${cookie}`,
+          },
+        });
+      } else {
+        createFormData.append("productPreview", previewFile);
+        await fetchApi.put(`/order/update/preview/${id}`, createFormData, {
+          headers: {
+            Authorization: `Bearer ${cookie}`,
+          },
+        });
+      }
       setModal(false);
     } catch (error) {
       errorHanddler(error, setErrorMessage);

@@ -33,7 +33,7 @@ const Order = () => {
       orders.data.data.list.forEach((order) => {
         order.email = order.customer.email;
         order.customer = order.customer.username;
-        order.hiddenUpdate = !["accept", "progress"].includes(
+        order.hiddenSendProduct = !["accept", "progress"].includes(
           order.orderStatus
         );
         order.hiddenProgress = !["paid", "revision"].includes(
@@ -127,13 +127,14 @@ const Order = () => {
           progress: (id, modalContent, setModal, setModalTitle, onClick) => {
             onClick(handleProgressClick(id));
           },
-          update: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Update Order");
+          sendProduct: (id, modalContent, setModal, setModalTitle) => {
+            setModalTitle("Send Product");
             modalContent(
               <OrderUpdateForm
                 id={id._id}
                 setModal={(event) => {
                   setModal(event);
+                  console.log(id);
                   fetchOrders();
                 }}
               />
