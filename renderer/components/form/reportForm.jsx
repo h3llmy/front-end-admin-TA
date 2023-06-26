@@ -4,6 +4,7 @@ import ModalFormButton from "../button/modalFormButton";
 import { fetchApi } from "../../../utils/fetch";
 import errorHanddler from "../../../utils/errorHanddler";
 import { getLoginCookie } from "../../../utils/cookie";
+import axios from "axios";
 
 const ReportForm = ({ label, color, setModal }) => {
   const [from, setFrom] = useState("");
@@ -32,17 +33,27 @@ const ReportForm = ({ label, color, setModal }) => {
 
   const downloadFile = async (fileUrl) => {
     if (fileUrl) {
-      const response = await fetch(fileUrl);
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      try {
+        const cookie = await getLoginCookie("user");
+        const response = await axios.get(fileUrl, {
+          responseType: "blob",
+          headers: {
+            Authorization: `Bearer ${cookie}`,
+          },
+        });
+        const blob = new Blob([response.data]);
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        throw new Error("Failed to generate a report");
+      }
     } else {
-      throw new Error("failed to generate a report");
+      throw new Error("Failed to generate a report");
     }
   };
 
