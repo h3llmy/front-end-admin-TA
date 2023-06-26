@@ -134,7 +134,6 @@ const Order = () => {
                 id={id._id}
                 setModal={(event) => {
                   setModal(event);
-                  console.log(id);
                   fetchOrders();
                 }}
               />
