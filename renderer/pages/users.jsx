@@ -64,13 +64,13 @@ const Users = () => {
         isLoading={isLoading}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Detail Product");
+            setModalTitle("Detail User");
             modalContent(
               <UserForm id={id._id} disable={true} setModal={setModal} />
             );
           },
           edit: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Update Product");
+            setModalTitle("Update User");
             modalContent(
               <UserForm
                 id={id._id}
