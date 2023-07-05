@@ -8,6 +8,7 @@ import OrderForm from "../components/form/orderForm";
 import errorHanddler from "../../utils/errorHanddler";
 import ModalButton from "../components/button/modalButton";
 import ReportForm from "../components/form/reportForm";
+import OrderUpdateForm from "../components/form/orderUpdateForm";
 
 const Order = () => {
   const [ordersList, setOrdersList] = useState({});
@@ -30,7 +31,14 @@ const Order = () => {
         }
       );
       orders.data.data.list.forEach((order) => {
+        order.email = order.customer.email;
         order.customer = order.customer.username;
+        order.hiddenSendProduct = !["accept", "progress"].includes(
+          order.orderStatus
+        );
+        order.hiddenProgress = !["paid", "revision"].includes(
+          order.orderStatus
+        );
       });
       setOrdersList(orders.data.data);
       setErrorMessage("");
@@ -38,6 +46,29 @@ const Order = () => {
       errorHanddler(error, setErrorMessage);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleContactClick = (email) => {
+    const mailtoLink = `mailto:${email}`;
+
+    window.location.href = mailtoLink;
+  };
+
+  const handleProgressClick = async (order) => {
+    try {
+      await fetchApi.put(
+        `/order/update/progress/${order._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${await getLoginCookie("user")}`,
+          },
+        }
+      );
+      fetchOrders();
+    } catch (error) {
+      alert(String(error));
     }
   };
 
@@ -85,7 +116,7 @@ const Order = () => {
             setModalTitle("Detail Order");
             modalContent(
               <OrderForm
-                id={id}
+                id={id._id}
                 disable={true}
                 setModal={(event) => {
                   setModal(event);
@@ -93,19 +124,23 @@ const Order = () => {
               />
             );
           },
-          update: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Update Order");
+          progress: (id, modalContent, setModal, setModalTitle, onClick) => {
+            onClick(handleProgressClick(id));
+          },
+          sendProduct: (id, modalContent, setModal, setModalTitle) => {
+            setModalTitle("Send Product");
             modalContent(
-              <OrderForm
-                id={id}
-                label={"Update"}
-                color={"bg-blue-600 hover:bg-blue-700"}
+              <OrderUpdateForm
+                id={id._id}
                 setModal={(event) => {
-                  fetchOrders();
                   setModal(event);
+                  fetchOrders();
                 }}
               />
             );
+          },
+          contact: (id, modalContent, setModal, setModalTitle, onClick) => {
+            onClick(handleContactClick(id.email));
           },
         }}
       />

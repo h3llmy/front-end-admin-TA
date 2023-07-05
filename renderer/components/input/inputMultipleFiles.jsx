@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import ProgressBar from "../loading/progressBar";
 import axios from "axios";
 import JSZip from "jszip";
+import { getLoginCookie } from "../../../utils/cookie";
 
 const InputMultipleFiles = ({
   disable,
@@ -21,6 +22,7 @@ const InputMultipleFiles = ({
 
   const fetchFile = async () => {
     try {
+      const cookie = await getLoginCookie("user");
       if (defaultValue && Array.isArray(defaultValue)) {
         const files = await Promise.all(
           defaultValue.map(async (value) => {
@@ -32,6 +34,9 @@ const InputMultipleFiles = ({
                   (progressEvent.loaded * 100) / progressEvent.total
                 );
                 setLoadingProgress(percentCompleted);
+              },
+              headers: {
+                Authorization: `Bearer ${cookie}`,
               },
             });
             return new File([response.data], fileName, {
@@ -211,7 +216,11 @@ const InputMultipleFiles = ({
                       />
                     </audio>
                   ) : file.type.includes("video/") ? (
-                    <video controls controlsList="nodownload">
+                    <video
+                      className="flex flex-center h-full"
+                      controls
+                      controlsList="nodownload"
+                    >
                       <source
                         src={file.url || URL.createObjectURL(file)}
                         type={file.type}
