@@ -9,12 +9,14 @@ import errorHanddler from "../../utils/errorHanddler";
 import ModalButton from "../components/button/modalButton";
 import ReportForm from "../components/form/reportForm";
 import OrderUpdateForm from "../components/form/orderUpdateForm";
+import InputSelect from "../components/input/select";
 
 const Order = () => {
   const [ordersList, setOrdersList] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [filter, setFilter] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const fetchOrders = async () => {
@@ -23,7 +25,7 @@ const Order = () => {
       const orders = await fetchApi.get(
         `/order/list?page=${currentPage}&limit=10${
           searchText && `&search=${searchText}`
-        }`,
+        }${filter && `&orderStatus=${filter}`}`,
         {
           headers: {
             Authorization: `Bearer ${await getLoginCookie("user")}`,
@@ -72,9 +74,13 @@ const Order = () => {
     }
   };
 
+  const handleFilter = (event) => {
+    setFilter(event);
+  };
+
   useEffect(() => {
     fetchOrders();
-  }, [currentPage, searchText, errorMessage]);
+  }, [currentPage, searchText, filter, errorMessage]);
 
   return (
     <>
@@ -85,7 +91,23 @@ const Order = () => {
         }}
       />
 
-      <div className="flex justify-end py-3">
+      <div className="flex justify-end py-3 space-x-4">
+        <div className="w-36">
+          <InputSelect
+            value={[
+              { value: "ordered", display: "Ordered" },
+              { value: "paid", display: "Paid" },
+              { value: "progress", display: "Progress" },
+              { value: "revision", display: "Revision" },
+              { value: "sended", display: "Sended" },
+              { value: "accept", display: "Accept" },
+              { value: "done", display: "Done" },
+              { value: "cancelled", display: "Cancelled" },
+              { value: "failed", display: "Failed" },
+            ]}
+            valueCallback={handleFilter}
+          />
+        </div>
         <ModalButton
           title={"Create Report"}
           label={"Create Report"}
