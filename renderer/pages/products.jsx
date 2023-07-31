@@ -29,7 +29,7 @@ const Product = () => {
         }
       );
       products.data.data.list.map((product) => {
-        product.category = product.category.name;
+        product.category = product.category?.name ?? "";
         product.maxRevision = String(product.maxRevision);
       });
       setProductsList(products.data.data);
