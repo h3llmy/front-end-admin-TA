@@ -11,6 +11,6 @@ files:
       - app
 publish: null
 win:
-  icon: resources/__yuuka_blue_archive_drawn_by_amonitto__sample-8a8247ab1c40e8ee7ad019f04f9c4d8d.jpg
+  icon: resources/logo.ico
 mac:
-  icon: resources/__yuuka_blue_archive_drawn_by_amonitto__sample-8a8247ab1c40e8ee7ad019f04f9c4d8d.jpg
+  icon: resources/logo.ico

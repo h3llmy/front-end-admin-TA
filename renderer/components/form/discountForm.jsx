@@ -69,7 +69,7 @@ const DiscountForm = ({ id, setModal, disable, label, color }) => {
             },
           });
           break;
-        case "activate/deactivate":
+        case "delete":
           await fetchApi.delete(`/discount/delete/${id}`, {
             headers: {
               Authorization: `Bearer ${await getLoginCookie("user")}`,
