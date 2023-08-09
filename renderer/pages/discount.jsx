@@ -33,10 +33,10 @@ const Discount = () => {
         },
       });
       discount.data.data.list.forEach((discount) => {
-        discount.product = discount.product.name;
-        discount.percentage = `${discount.percentage}%`;
-        discount.startAt = dateConvert(discount.startAt);
-        discount.expiredAt = dateConvert(discount.expiredAt);
+        discount.product = discount?.product?.name;
+        discount.percentage = `${discount?.percentage}%`;
+        discount.startAt = dateConvert(discount?.startAt);
+        discount.expiredAt = dateConvert(discount?.expiredAt);
       });
       setDiscountsList(discount.data.data);
       setErrorMessage("");
