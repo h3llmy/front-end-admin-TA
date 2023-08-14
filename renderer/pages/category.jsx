@@ -78,13 +78,13 @@ const Category = () => {
         errorMessage={errorMessage}
         actions={{
           detail: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Detail Product");
+            setModalTitle("Detail Category");
             modalContent(
               <CategoryForm id={id._id} disable={true} setModal={setModal} />
             );
           },
           edit: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Update Product");
+            setModalTitle("Update Category");
             modalContent(
               <CategoryForm
                 id={id._id}
@@ -98,7 +98,7 @@ const Category = () => {
             );
           },
           delete: (id, modalContent, setModal, setModalTitle) => {
-            setModalTitle("Delete Product");
+            setModalTitle("Delete Category");
             modalContent(
               <CategoryForm
                 id={id._id}
